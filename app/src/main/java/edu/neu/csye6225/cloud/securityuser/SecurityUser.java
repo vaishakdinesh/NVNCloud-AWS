@@ -20,7 +20,6 @@ public class SecurityUser extends User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Role roles = super.getRole();
-        System.out.println("Security user roles: " + roles);
         return AuthorityUtils.commaSeparatedStringToAuthorityList(roles.toString());
     }
 

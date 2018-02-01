@@ -29,12 +29,23 @@ public class User {
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastName;
 
+    @Column (name = "isactive", nullable = false)
+    private boolean isActive;
+
+    @Column (name = "token", nullable = false, unique = true)
+    private String token;
+
     public User(){}
 
     public User(User user){
+        this.userId = user.getUserId();
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.token = user.getToken();
+        this.isActive = user.isActive();
     }
 
     public int getUserId() {
@@ -83,5 +94,21 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
