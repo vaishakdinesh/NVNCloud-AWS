@@ -15,4 +15,9 @@ public class IndexController {
         return "log-in";
     }
 
+    @RequestMapping(value = "/welcome")
+    public String goWelcome(){
+        return "home";
+    }
+
 }

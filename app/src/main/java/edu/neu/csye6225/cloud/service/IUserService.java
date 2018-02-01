@@ -8,4 +8,5 @@ public interface IUserService {
 
     User findUserByEmail(String email);
     User saveUser(User user);
+    boolean activateUser(String token);
 }
