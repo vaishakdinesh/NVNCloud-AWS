@@ -26,14 +26,19 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User saveUser(User user) {
-        user.setRole(Role.USER);
-        user.setActive(false);
-        user.setToken(issueUniqueToken());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
-        return savedUser;
+    public User saveUser(String fname, String lname, String useremail, String password) {
+        User newUser = new User();
+        newUser.setFirstName(fname);
+        newUser.setLastName(lname);
+        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setEmail(useremail);
+        newUser.setRole(Role.USER);
+        newUser.setToken(issueUniqueToken());
+        newUser.setActive(false);
+        User user = userRepository.save(newUser);
+        return user;
     }
+
 
     @Override
     public boolean activateUser(String token) {
