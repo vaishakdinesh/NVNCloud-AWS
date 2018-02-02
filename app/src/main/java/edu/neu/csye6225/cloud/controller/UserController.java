@@ -5,6 +5,7 @@ import edu.neu.csye6225.cloud.service.EmailServiceImp;
 import edu.neu.csye6225.cloud.service.IUserService;
 import edu.neu.csye6225.cloud.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +26,9 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/email-check", method = RequestMethod.POST, produces = "text/plain")
-    public String isDuplicateUser(@RequestParam String userEmail){
+    public String isDuplicateUser(@RequestParam String email){
         try{
-            User user = iUserService.findUserByEmail(userEmail);
+            User user = iUserService.findUserByEmail(email);
             if(user != null){
                 return String.format("%s already in use. Please Log-In", user.getEmail());
             } else {
@@ -39,29 +40,25 @@ public class UserController {
         }
     }
 
-    /**
-     * Register new user
-     * @param user
-     * @return success or failure message
-     */
+
     @ResponseBody
     @RequestMapping(value = "/register-user", method = RequestMethod.POST, produces = "text/plain")
-    public String registerUser(@RequestBody User user, HttpServletRequest request){
+    public String registerUser(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String useremail, @RequestParam String password, HttpServletRequest request){
         try {
-           if(user.getEmail().isEmpty()){
+           if(useremail.isEmpty()){
                return "user Email is a required field.";
            }
-           if(user.getFirstName().isEmpty()){
+           if(firstname.isEmpty()){
                return "user First Name is a required field.";
            }
-           if(user.getLastName().isEmpty()){
+           if(lastname.isEmpty()){
                 return "user Last Name is a required field.";
            }
-           if(user.getPassword().isEmpty()){
+           if(password.isEmpty()){
                return "Password is a required field.";
            }
-           if(Utility.isEmailValid(user.getEmail())){
-               User savedUser = iUserService.saveUser(user);
+           if(Utility.isEmailValid(useremail)){
+               User savedUser = iUserService.saveUser(firstname, lastname, useremail, password);
                if(savedUser != null){
                    emailServiceImp.sendVerificationMail(savedUser,request.getRequestURL().toString());
                    return "User registration successful. Please activate your account by using activation link sent to your email.";
@@ -87,5 +84,6 @@ public class UserController {
         }
         return "Unable to activate your account now. Please email us at csyenvncloud@gmail.com";
     }
+
 
 }
