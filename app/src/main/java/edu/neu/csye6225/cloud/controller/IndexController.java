@@ -12,12 +12,12 @@ public class IndexController {
      */
     @RequestMapping(value = "/")
     public String goLogin(){
-        return "log-in";
+        return "log-in.html";
     }
 
     @RequestMapping(value = "/welcome")
     public String goWelcome(){
-        return "home";
+        return "home.html";
     }
 
 }
