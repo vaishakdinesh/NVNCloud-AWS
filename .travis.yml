@@ -13,5 +13,7 @@ notifications:
 email:
   recipients:
     - dinesh.v@husy.neu.edu
+    - kartha.n@husky.neu.edu
+    - nelagondanahalli.n@husky.neu.edu
 notifications:
     slack: csye6225cloud:MKvTRRJTrkMm3HTD33mRDaIQ
