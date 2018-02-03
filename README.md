@@ -86,6 +86,7 @@ Has not been deployed as of now.
 
 * [Spring Boot](https://projects.spring.io/spring-boot) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
+* [Angular](https://angular.io/) - Frontend Framework
 
 
 ## Authors
