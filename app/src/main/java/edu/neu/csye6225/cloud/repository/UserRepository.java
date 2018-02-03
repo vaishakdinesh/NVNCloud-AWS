@@ -9,4 +9,5 @@ public interface UserRepository extends CrudRepository<User,Integer> {
     User findUserByEmail(String email);
     User findUserByToken(String token);
     User save(User user);
+    User findDistinctByToken(String token);
 }
