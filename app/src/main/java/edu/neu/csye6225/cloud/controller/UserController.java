@@ -60,7 +60,8 @@ public class UserController {
            if(Utility.isEmailValid(useremail)){
                User savedUser = iUserService.saveUser(firstname, lastname, useremail, password);
                if(savedUser != null){
-                   emailServiceImp.sendVerificationMail(savedUser,request.getRequestURL().toString());
+                   emailServiceImp.sendVerificationMail(savedUser,
+                           request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort());
                    return "User registration successful. Please activate your account by using activation link sent to your email.";
                } else {
                    return "Unable to register now. Try again later.";
