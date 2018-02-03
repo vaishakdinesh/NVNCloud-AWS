@@ -86,5 +86,16 @@ public class UserController {
         return "Unable to activate your account now. Please email us at csyenvncloud@gmail.com";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/registration-confirmation-jmeter", method = RequestMethod.GET, produces = "text/plain")
+    public String activateUserJmeter(@RequestParam String email){
+        if(!email.isEmpty()){
+            if(iUserService.activateUserJmeter(email)){
+                return "Your account is active now.";
+            }
+        }
+        return "Unable to activate your account now. Please email us at csyenvncloud@gmail.com";
+    }
+
 
 }
