@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nvn-cloud</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/log-in.css">
+    <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/angular/angular.min.js"></script>
+    <script type="text/javascript" src="ngcontroller/nglogin.js"></script>
+    <script type="text/javascript" src="js/scroll-spy.js"></script>
+</head>
+<body>
+<div ng-app="loginApp" ng-controller="loginCtlr">
+    <!-- nav start -->
+    <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!--<button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#myRightNavbar">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+                        class="icon-bar"></span>
+                </button>-->
+                <a class="navbar-brand" href="#page-top"><span class="tweak">nvn</span>-cloud</a>
+            </div>
+            <div>
+                <div class="collapse navbar-collapse" id="myRightNavbar">
+                    <ul id="links-right" class="nav navbar-nav navbar-right">
+                        <li><a href="#player">Sign-Up</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- nav end -->
+
+    <!-- main content -->
+    <!-- page-top (log-in form with ofooty background image) section start -->
+    <div id="page-top" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <div id="head-box">
+                    <div class="container-fluid text-center">
+                        <h3>
+                            <span class="tweak">nvn</span>-cloud
+                        </h3>
+                        <p>Network Structures and Cloud Computing</p>
+                        <br> <br>
+                        <p>csye6225 - assignment2</p>
+                        <br> <br> <br> <br>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div id="login-box">
+                    <div class="logo">
+                        <h1 class="logo-caption">
+                            <span class="tweak">L</span>ogin
+                        </h1>
+                    </div>
+                    <div class="controls">
+                        <form name="loginform" ng-submit=loginuser()>
+                            <div class="error">
+                                <p>
+									<span ng-cloak
+                                          ng-show="loginform.useremail.$touched && loginform.useremail.$invalid">User Email
+										is required.</span> <span ng-cloak
+                                                                  ng-show="useremail.length > 0 && loginform.password.$touched && loginform.password.$invalid">Password
+										is required.</span>
+                                </p>
+                                <p>{{ loginErrorMsg }}</p>
+                            </div>
+                            <input class="form-control" type="text" name="useremail"
+                                   placeholder="User Email" ng-model="useremail" required /> <input
+                                class="form-control" type="password" name="password"
+                                placeholder="Password" ng-model="password" required />
+                            <button type="submit" ng-disabled="logform.$invalid"
+                                    class="btn btn-default btn-block btn-custom">Login</button>
+                            <!--<sec:csrfInput/>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- page-top section end -->
+
+    <!-- user register section start -->
+    <div id="player" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div id="phead-box">
+                    <!-- Heading lines start -->
+                    <div class="container-fluid text-center">
+                        <h3>
+                            <span class="tweak">User</span>Sign-Up
+                        </h3>
+                        <br> <br>
+                        <p>Welcome to nvn-cloud.</p>
+                        <br>
+                    </div>
+                </div>
+                <!-- Heading lines end -->
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div id="register-box">
+                    <!-- register user box start -->
+                    <div class="logo">
+                        <h1 class="logo-caption">
+                            <span class="tweak">User </span>Register
+                        </h1>
+                    </div>
+                    <div class="controls">
+                        <form name="regform" ng-submit="addUser()">
+                            <div class="error">
+                                <p>
+									<span ng-cloak
+                                          ng-show="regform.fname.$touched && regform.fname.$invalid">First
+										Name is required.</span> <span ng-cloak
+                                                                       ng-show="fname.length > 0 && regform.lname.$touched && regform.lname.$invalid">Last
+										Name is required.</span>  <span ng-cloak
+                                                                        ng-show="fname.length > 0 && lname.length > 0  && regform.useremail.$touched && regform.useremail.$invalid">User email
+										is required.</span> <span ng-cloak
+                                                                  ng-show="fname.length > 0 && lname.length > 0  && useremail.length > 0 && regform.password.$touched && regform.password.$invalid">Password
+										is required.</span> <span ng-cloak
+                                                                  ng-show="fname.length > 0 && lname.length > 0 && useremail.length > 0 && password.length > 0 && regform.cpassword.$touched && regform.cpassword.$invalid">Confirm
+										Password is required.</span> <span ng-cloak
+                                                                           ng-show="fname.length > 0 && lname.length > 0  && useremail.length > 0 && password.length > 0 && cpassword.length > 0 && password != cpassword">Password
+										doesn't match.</span> <span>{{ invlaidUserEmail }}</span> <span class="msg">{{
+										newUserMessage }}</span>
+                                </p>
+
+                            </div>
+                            <input class="form-control" type="text" name="fname"
+                                   placeholder="First Name" ng-model="fname" required
+                                   ng-keyup="clearSuccessMsg()" /> <input class="form-control"
+                                                                          type="text" name="lname" placeholder="Last Name"
+                                                                          ng-model="lname" required />
+                            <br> <input class="form-control" type="text"
+                                        name="useremail" placeholder="User Email" ng-model="useremail"
+                                        required ng-keyup="validateUserEmail()" /> <input
+                                class="form-control" type="password" name="password"
+                                placeholder="Password" ng-model="password" required /> <input
+                                class="form-control" type="password" name="cpassword"
+                                placeholder="Confirm Password" ng-model="cpassword" required />
+                            <button type="submit"
+                                    ng-disabled="regform.$invalid || password != cpassword || invlaidUserEmail.length > 0 "
+                                    class="btn btn-default btn-block btn-custom">Register</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- register users box end -->
+            </div>
+        </div>
+    </div>
+    <!-- user section end -->
+</div>
+</body>
+</html>

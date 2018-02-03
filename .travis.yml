@@ -1,0 +1,19 @@
+language: java
+jdk:
+- openjdk8
+
+sudo: false
+install: true
+
+script:
+- cd app
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+notifications:
+email:
+  recipients:
+    - dinesh.v@husy.neu.edu
+    - kartha.n@husky.neu.edu
+    - nelagondanahalli.n@husky.neu.edu
+notifications:
+    slack: csye6225cloud:MKvTRRJTrkMm3HTD33mRDaIQ

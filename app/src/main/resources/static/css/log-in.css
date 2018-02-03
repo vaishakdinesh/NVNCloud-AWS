@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Poiret+One');
+
+#myNavbar{
+    background: white;
+}
+
+
+.error > p {
+    font-family:'Poiret One', cursive;
+    color: #ff5252;
+    font-size: medium;
+    height: 35px;
+}
+
+.error > .alert-dismissable > p{
+    font-family:'Poiret One', cursive;
+    color: #ff5252;
+    font-size: medium;
+    height: 25px;
+    border-radius: 0px;
+    font-weight: bold;
+}
+
+.error > p > .msg{
+    font-family:'Poiret One', cursive;
+    color: #00cc66;
+    font-size: medium;
+}
+
+.navbar-default .navbar-brand{
+    margin-left: 0 !important;
+    color: black;
+    font-family:'Poiret One', cursive;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.navbar-default .navbar-brand .tweak{
+    color: #ff5252;
+}
+
+
+#links-right > li:LAST-CHILD{
+    margin-right: 25px;
+}
+
+#links-right > li a{
+    color: black;
+    font-family:'Poiret One', cursive;
+    font-size: large;
+    font-weight: bold;
+}
+
+#links-right > li >a:hover{
+    color: #ff5252;
+    background-color: white;
+    font-family:'Poiret One', cursive;
+    font-size: large;
+}
+
+#links-right >.active>a,
+#links-right >.active>a:focus,
+#links-right >.active>a:hover{
+    color: #ff5252;
+    background-color: white;
+    font-family:'Poiret One', cursive;
+    font-size: large;
+}
+
+#page-top > .row {
+    padding: 50px 0px 50px 0px;
+}
+
+#head-box{
+    margin-top: 50px;
+    min-height: 250px;
+    padding: 20px;
+}
+
+#head-box > .container-fluid > h3{
+    color: black;
+    font-family:'Poiret One', cursive;
+    font-size: 0.75in;
+}
+
+#head-box > .container-fluid > p{
+    color: black;
+    font-family:'Poiret One', cursive;
+    font-size: x-large;
+}
+
+#head-box > .container-fluid > h3 > .tweak{
+    color: #ff5252;
+    font-family:'Poiret One', cursive;
+    font-size: 0.75in;
+}
+
+#phead-box{
+    margin-top: 50px;
+    min-height: 250px;
+    padding: 20px;
+}
+
+#phead-box > .container-fluid > h3{
+    color: white;
+    font-family:'Poiret One', cursive;
+    font-size: 0.5in;
+}
+
+#phead-box > .container-fluid > p{
+    color: white;
+    font-family:'Poiret One', cursive;
+    font-size: x-large;
+}
+
+#phead-box > .container-fluid > h3 > .tweak{
+    color: #ff5252;
+    font-family:'Poiret One', cursive;
+    font-size: 0.5in;
+}
+
+#phead-box > .container-fluid > h3 > .tweak-g{
+    color: black;
+    font-family:'Poiret One', cursive;
+    font-size: 0.5in;
+}
+
+
+#login-box {
+    margin-top: 50px;
+    border: 1px solid black;
+    background: rgba(48, 46, 45, 1);
+    min-height: 250px;
+    padding: 20px;
+}
+#login-box .logo .logo-caption {
+    font-family: 'Poiret One', cursive;
+    color: white;
+    text-align: center;
+    margin-bottom: 0px;
+}
+#login-box .logo .tweak {
+    color: #ff5252;
+}
+
+#login-box .controls {
+    padding-top: 30px;
+}
+#login-box .controls input {
+    border-radius: 0px;
+    background: rgb(98, 96, 96);
+    border: 0px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+}
+#login-box .controls input:focus {
+    box-shadow: none;
+}
+#login-box .controls input:first-child {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+#login-box .controls input:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+#login-box button.btn-custom {
+    border-radius: 2px;
+    margin-top: 8px;
+    background:#ff5252;
+    border-color: rgba(48, 46, 45, 1);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+}
+#login-box button.btn-custom:hover{
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+    background: rgba(48, 46, 45, 1);
+    border-color: #ff5252;
+}
+
+
+#register-box {
+    margin-top: 100px;
+    border: 1px solid black;
+    background: rgba(48, 46, 45, 1);
+    min-height: 250px;
+    padding: 20px;
+}
+#register-box .logo .logo-caption {
+    font-family: 'Poiret One', cursive;
+    color: white;
+    text-align: center;
+    margin-bottom: 0px;
+}
+#register-box .logo .tweak {
+    color: #ff5252;
+}
+#register-box .controls {
+    padding-top: 30px;
+}
+#register-box .controls input {
+    border-radius: 0px;
+    background: rgb(98, 96, 96);
+    border: 0px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+}
+#register-box .controls input:focus {
+    box-shadow: none;
+}
+#register-box .controls input:first-child {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+#register-box .controls input:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+#register-box button.btn-custom {
+    border-radius: 2px;
+    margin-top: 8px;
+    background:#ff5252;
+    border-color: rgba(48, 46, 45, 1);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+}
+#register-box button.btn-custom:hover{
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+    background: rgba(48, 46, 45, 1);
+    border-color: #ff5252;
+}
+
+#player{
+    background-color: rgb(98, 96, 96);
+    padding-bottom: 40px;
+}
+
+#ground-crew{
+    background-color: rgb(255, 128, 128);
+    padding-bottom: 40px;
+}
+
+
+/* scroll bar css*/
+::-webkit-scrollbar {
+    width: 3px;
+    background-color: inherit;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #cc0066;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background-color: #cc0066;
+}
