@@ -33,7 +33,7 @@ public class ConfigSpringSecurity extends WebSecurityConfigurerAdapter{
         .formLogin()
         .loginPage("/")
         .loginProcessingUrl("/log-in")
-        .usernameParameter("username")
+        .usernameParameter("useremail")
         .passwordParameter("password")
         .defaultSuccessUrl("/welcome", false)
         .failureUrl("/?error=true")
@@ -42,7 +42,7 @@ public class ConfigSpringSecurity extends WebSecurityConfigurerAdapter{
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-        .logoutSuccessUrl("/?logout")
+        .logoutSuccessUrl("/")
         .deleteCookies("JSESSIONID")
         .invalidateHttpSession(true);
 
