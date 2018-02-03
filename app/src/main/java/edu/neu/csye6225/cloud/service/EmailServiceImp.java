@@ -19,7 +19,7 @@ public class EmailServiceImp {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(user.getEmail());
         email.setSubject("nvn-cloud Registration Confirmation");
-        email.setText(VERIFICATION_MESSAGE + " rn" + path + CONFIRMATION_URL + user.getToken());
+        email.setText(VERIFICATION_MESSAGE + "  " + path + CONFIRMATION_URL + user.getToken());
         eMailSender.send(email);
     }
 }
