@@ -44,7 +44,12 @@ app.controller('loginCtlr', ['$scope','userEmailCheck', 'registerUser', 'loginUs
             $scope.password = "";
             $scope.loginform.$setPristine();
             $scope.loginform.$setUntouched();
-            $scope.loginErrorMsg = result;
+            if(result){
+                $scope.loginErrorMsg = "";
+            } else {
+                $scope.loginErrorMsg = result;
+            }
+
         });
     };
 
@@ -52,20 +57,21 @@ app.controller('loginCtlr', ['$scope','userEmailCheck', 'registerUser', 'loginUs
 
 
 /* service to register user  */
-app.service('loginUser', [ '$http', function($http) {
+app.service('loginUser', [ '$http', '$location', function($http, $location) {
 
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8";
 
     this.doLogin = function(useremail, password, cb) {
         var data = 'useremail=' +useremail + '&password=' + password;
         $http({
-            url : 'register-user',
+            url : 'log-in',
             method : 'POST',
             data : data
         }).then(function(response) {
-            cb("");
+            window.location = "/welcome";
+            cb(true)
         }, function(reason){
-            cb("Invalid Credentials");
+            cb(false);
         });
 
     };
@@ -97,7 +103,7 @@ app.service('registerUser', [ '$http', function($http) {
 /* service to check duplicate user email */
 app.service('userEmailCheck', [ '$http', function($http) {
 
-    this.isDuplicateUserEmail = function(name, cb) {
+    this.isDuplicateUserEmail = function(email, cb) {
         var data = {
             email : email
         }
