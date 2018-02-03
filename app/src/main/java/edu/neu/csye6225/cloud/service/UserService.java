@@ -55,7 +55,7 @@ public class UserService implements IUserService {
         String token = "";
         do {
             token = getUniqueToken();
-        } while (userRepository.findUserByToken(token) == null);
+        } while (userRepository.findDistinctByToken(token) != null);
         return token;
     }
 
