@@ -6,7 +6,8 @@ sudo: false
 install: true
 
 script:
-- mvn clean install
+- cd app
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 notifications:
 email:
