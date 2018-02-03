@@ -51,6 +51,17 @@ public class UserService implements IUserService {
         return false;
     }
 
+    @Override
+    public boolean activateUserJmeter(String email){
+        User user = userRepository.findUserByEmail(email);
+        if(user != null){
+            user.setActive(true);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     private String issueUniqueToken(){
         String token = "";
         do {
