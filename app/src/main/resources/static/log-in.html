@@ -12,6 +12,7 @@
     <script type="text/javascript" src="ngcontroller/nglogin.js"></script>
     <script type="text/javascript" src="js/scroll-spy.js"></script>
 </head>
+<body>
 <div ng-app="loginApp" ng-controller="loginCtlr">
     <!-- nav start -->
     <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top">
@@ -69,7 +70,7 @@
                                                                   ng-show="useremail.length > 0 && loginform.password.$touched && loginform.password.$invalid">Password
 										is required.</span>
                                 </p>
-                                <p>{ loginErrorMsg }</p>
+                                <p>{{ loginErrorMsg }}</p>
                             </div>
                             <input class="form-control" type="text" name="useremail"
                                    placeholder="User Email" ng-model="useremail" required /> <input
@@ -105,7 +106,7 @@
             </div>
             <div class="col-sm-12 col-md-6">
                 <div id="register-box">
-                    <!-- register player box start -->
+                    <!-- register user box start -->
                     <div class="logo">
                         <h1 class="logo-caption">
                             <span class="tweak">User </span>Register
@@ -130,6 +131,7 @@
 										doesn't match.</span> <span>{{ invlaidUserEmail }}</span> <span class="msg">{{
 										newUserMessage }}</span>
                                 </p>
+
                             </div>
                             <input class="form-control" type="text" name="fname"
                                    placeholder="First Name" ng-model="fname" required
@@ -149,11 +151,11 @@
                         </form>
                     </div>
                 </div>
-                <!-- register player box end -->
+                <!-- register users box end -->
             </div>
         </div>
     </div>
-    <!-- player section end -->
+    <!-- user section end -->
 </div>
 </body>
 </html>
