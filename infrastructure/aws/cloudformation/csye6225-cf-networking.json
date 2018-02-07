@@ -1,0 +1,33 @@
+{
+  "AWSTemplateFormatVersion" : "csye6225-assignment3-v1",
+
+  "Description" : "csye6225 cloud formation template",
+
+  "Metadata" : {
+    template metadata
+  },
+
+  "Parameters" : {
+    set of parameters
+  },
+
+  "Mappings" : {
+    set of mappings
+  },
+
+  "Conditions" : {
+    set of conditions
+  },
+
+  "Transform" : {
+    set of transforms
+  },
+
+  "Resources" : {
+    set of resources
+  },
+
+  "Outputs" : {
+    set of outputs
+  }
+}
