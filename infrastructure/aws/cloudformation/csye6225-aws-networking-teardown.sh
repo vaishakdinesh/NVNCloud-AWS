@@ -1,9 +1,22 @@
 
 StackName=$1
-echo "Terminating $StackName network setup"
+if [ -z "$StackName" ]; then
+  echo "ERROR: Stackname expected....."
+  exit 1
+fi
 
+echo "Terminating $StackName network setup"
 aws cloudformation delete-stack --stack-name $StackName
 
+stackid=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackId]' --output text`
+stackstatus=""
+if [ -z "$stackid" ]; then
+  exit 1
+fi
+until [ "$stackstatus" = 'DELETE_COMPLETE' ]; do
+  stackstatus=`aws cloudformation list-stacks --query 'StackSummaries[?StackId==\`'$stackid'\`][StackStatus]' --output text`
 
-echo "$StackName network terminated!!!!"
-#aws cloudformation describe-stack-events --stack-name stackapp --query 'StackEvents[?ResourceStatus==`DELETE_COMPLETE`].[ResourceType,ResourceStatus,Timestamp]'
+done
+if [ "$stackstatus" = 'DELETE_COMPLETE' ]; then
+  echo "$StackName terminated sucessfully!!"
+fi
