@@ -1,33 +1,55 @@
 {
-  "AWSTemplateFormatVersion" : "csye6225-assignment3-v1",
+  "AWSTemplateFormatVersion" : "2010-09-09",
 
   "Description" : "csye6225 cloud formation template",
 
-  "Metadata" : {
-    template metadata
-  },
+"Mappings" : {
+    "RegionMap" : {
+            "us-east-1" : {"AMI" : "ami-41e0b93b"}
+  }},
+"Resources" : {
+          "VPC":{
+            "Type":"AWS::EC2::VPC",
+            "Properties":{
+              "CidrBlock": "10.0.0.0/16",
+              "EnableDnsSupport":"true",
+              "InstanceTenancy": "default",
+                  "Tags": [{"Key": "Name","Value": {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-vpc"]]}
+                      }]
+                  }
+                },
+          "InternetGateway" : {
+           "Type" : "AWS::EC2::InternetGateway",
+           "Properties" : {
+             "Tags" : [ {"Key" : "Name", "Value" : {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-InternetGateway"]]}
+             }]
+           }
+         },
 
-  "Parameters" : {
-    set of parameters
-  },
+         "AttachGateway" : {
+            "Type" : "AWS::EC2::VPCGatewayAttachment",
+            "Properties" : {
+              "VpcId" : { "Ref" : "VPC" },
+              "InternetGatewayId" : { "Ref" : "InternetGateway" }
+            }
+         },
 
-  "Mappings" : {
-    set of mappings
-  },
+         "RouteTable" : {
+           "Type" : "AWS::EC2::RouteTable",
+           "Properties" : {
+             "VpcId" : {"Ref" : "VPC"},
+             "Tags" : [ {"Key" : "Name", "Value" : {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-public-route-table"]]}
+             }]
+           }
+         },
 
-  "Conditions" : {
-    set of conditions
-  },
-
-  "Transform" : {
-    set of transforms
-  },
-
-  "Resources" : {
-    set of resources
-  },
-
-  "Outputs" : {
-    set of outputs
+         "Route" : {
+           "Type" : "AWS::EC2::Route",
+           "DependsOn" : "AttachGateway",
+           "Properties" : {
+             "RouteTableId" : { "Ref" : "RouteTable" },
+             "DestinationCidrBlock" : "0.0.0.0/0",
+             "GatewayId" : { "Ref" : "InternetGateway" }
+           }}
+         }
   }
-}
