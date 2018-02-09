@@ -1,4 +1,4 @@
-
+#!/bin/bash
 StackName=$1
 if [ -z "$StackName" ]; then
   echo "ERROR: Stackname expected....."
