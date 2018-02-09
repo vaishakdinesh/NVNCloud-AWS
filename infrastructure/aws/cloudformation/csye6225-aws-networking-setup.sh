@@ -1,37 +1,75 @@
 #!/bin/bash
-
 StackName=$1
+stackstatus=""
+createStackStatus=""
+createFlag=true
+
+if [ -z "$StackName" ]; then
+  echo "No stack name provided. Script exiting.."
+  exit 1
+fi
 echo "Starting $StackName network setup"
 
-aws cloudformation create-stack --stack-name $StackName --template-body file://csye6225-cf-networking.json
+echo "Starting to create the stack......"
 
-#Comment everything below jsut to create the stack
-#need to make this block run in every n secs
-#timer block start
-stackstatus= ``aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text``
-#run just the AWS command within `` `` in the terminal after a sample stack is created to know the out put.
-#if --output text parameter is removed u will get the output as list.
-echo "$stackstatus"
+createStackStatus=`aws cloudformation create-stack --stack-name $StackName --template-body file://csye6225-cf-networking.json`
 
-#this if condition is not working its not comparing the values
-if [ "$stackstatus" == "CREATE_COMPLETE" ]; then
-  echo "if output--- $stackstatus"
-  echo "$StackName network setup done!!!!"
-
-#this else block is to get all the stack events and the print if any resourse failed.
-#try runing the command in the terminal(better without --output text)
-# else
-#   resource = ``aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[*][ResourceStatus,ResourceType]' --output text``
-#   if [="CREATE_FAILED"]; then
-#     echo "$resource creation failed! "
-#   fi
-
+if [ -z "$createStackStatus" ]; then
+  echo "Failed to create stack"
+  exit 1
 fi
-#timer block end
 
-#usefull links
-#https://docs.aws.amazon.com/cli/latest/userguide/controlling-output.html
-#https://docs.aws.amazon.com/cli/latest/reference/cloudformation/index.html#cli-aws-cloudformation
+until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
+  echo "Adding resources to the stack......"
 
+  vpcStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==\`AWS::EC2::VPC\` && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
+  routeTableStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==\`AWS::EC2::RouteTable\` && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
+  routeStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==\`AWS::EC2::Route\` && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
+  internetGatewayStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==\`AWS::EC2::InternetGateway\` && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
+  vpcGatewayAttachmentStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==\`AWS::EC2::VPCGatewayAttachment\` && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
 
-#aws cloudformation describe-stack-events --stack-name stackapp --query 'StackEvents[?ResourceStatus==`CREATE_COMPLETE`].[ResourceType,ResourceStatus,Timestamp]'
+  if [ "$vpcStatus" = "CREATE_FAILED" ]; then
+    createFlag=false
+    echo "vpc creation failed! "
+    aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
+    echo "deleting stack..... "
+    bash ./csye6225-aws-networking-teardown.sh $StackName
+    break
+  fi
+
+  if [ "$routeTableStatus" = "CREATE_FAILED" ]; then
+    createFlag=false
+    echo "RouteTable creation failed! "
+    aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
+    echo "deleting stack..... "
+    bash ./csye6225-aws-networking-teardown.sh $StackName
+    break
+  fi
+
+  if [ "$routeStatus" = "CREATE_FAILED" ]; then
+    createFlag=false
+    echo "Route creation failed! "
+    aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
+    echo "deleting stack..... "
+    bash ./csye6225-aws-networking-teardown.sh $StackName
+    break
+  fi
+
+  if [ "$vpcGatewayAttachmentStatus" = "CREATE_FAILED" ]; then
+    createFlag=false
+    echo "VPCGatewayAttachment creation failed! "
+    aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
+    echo "deleting stack..... "
+    bash ./csye6225-aws-networking-teardown.sh $StackName
+    break
+  fi
+
+  stackstatus=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text`
+  sleep 20
+done
+
+if [ "$createFlag" = true ]; then
+  echo "Stack resources created successfully"
+  aws cloudformation list-stack-resources --stack-name $StackName
+fi
+exit 0
