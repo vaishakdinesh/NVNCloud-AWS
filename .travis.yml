@@ -7,7 +7,7 @@ install: true
 
 script:
 - cd app
-- ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -B -V
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 notifications:
 email:
