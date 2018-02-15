@@ -1,7 +1,11 @@
 #!/bin/bash
 
+stackName=$1
 
-
+aws cloudformation create-stack --stack-name $stackName --template-body file://csye6225-cf-application.json \
+  --parameters ParameterKey=DBName,ParameterValue=csye6225 ParameterKey=DBUser,ParameterValue=csye6225master \
+  ParameterKey=DBPassword,ParameterValue=csye6225password ParameterKey=bucketName,ParameterValue=s3.nithin.me \
+  ParameterKey=DBSubnetGroupName,ParameterValue=$2 ParameterKey=DBSecurityGroup,ParameterValue=$3
 
 
 # Assignment 4
