@@ -33,7 +33,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     echo "vpc creation failed! "
     aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
     echo "deleting stack..... "
-    bash ./csye6225-aws-networking-teardown.sh $StackName
+    bash ./csye6225-aws-cf-terminate-stack.sh $StackName
     break
   fi
 
@@ -42,7 +42,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     echo "RouteTable creation failed! "
     aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
     echo "deleting stack..... "
-    bash ./csye6225-aws-networking-teardown.sh $StackName
+    bash ./csye6225-aws-cf-terminate-stack.sh $StackName
     break
   fi
 
@@ -51,7 +51,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     echo "Route creation failed! "
     aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
     echo "deleting stack..... "
-    bash ./csye6225-aws-networking-teardown.sh $StackName
+    bash ./csye6225-aws-cf-terminate-stack.sh $StackName
     break
   fi
 
@@ -60,7 +60,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     echo "VPCGatewayAttachment creation failed! "
     aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType==`AWS::EC2::VPC` && ResourceStatus==`CREATE_FAILED`)]'
     echo "deleting stack..... "
-    bash ./csye6225-aws-networking-teardown.sh $StackName
+    bash ./csye6225-aws-cf-terminate-stack.sh $StackName
     break
   fi
 

@@ -1,5 +1,6 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "csye6225 cloudformation application stack",
 
   "Parameters": {
 
@@ -15,14 +16,8 @@
   			"Description": "Database Password",
   			"Type": "String"
   		},
-      "DBSubnetGroupName": {
-        "Description": "Subnet group name",
-  			"Type": "String"
-      },
-      "DBSecurityGroup":{
-        "Description": "Security group",
-  			"Type": "String"
-      },
+
+
   		"bucketName": {
   			"Description": "Bucket name",
   			"Type": "String"
@@ -82,12 +77,9 @@
               "DBName": {
                 "Ref": "DBName"
               },
-              "DBSubnetGroupName": {
-                "Ref": "DBSubnetGroupName"
-              },
-              "DBSecurityGroups": [{
-                "Ref": "DBSecurityGroup"
-              }]
+
+              "DBSecurityGroups": [{"Fn::ImportValue" : "GroupName"}],
+              "DBSubnetGroupName": {"Fn::ImportValue" : "DBSubnetGroupName"}
             },
             "DeletionPolicy": "Snapshot"
           },
