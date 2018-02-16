@@ -174,7 +174,7 @@
       "GroupName": {
         "Description": "Name of NVNCloudRDSSecurityGroup",
         "Value": { "Ref": "NVNCloudRDSSecurityGroup"},
-        "Export" : { "Name" : "GroupName" }
+        "Export" : { "Name" : "RDSGroupName" }
       },
       "DBSubnetGroupName":{
         "Description": "Name of DBSubnetGroup",
