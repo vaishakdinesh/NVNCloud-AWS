@@ -6,7 +6,7 @@ aws cloudformation create-stack --stack-name $stackName --template-body file://c
   --parameters ParameterKey=DBName,ParameterValue=csye6225 \
   ParameterKey=DBUser,ParameterValue=csye6225master \
   ParameterKey=DBPassword,ParameterValue=csye6225password \
-  ParameterKey=bucketName,ParameterValue=s3.nithin.me
+  ParameterKey=bucketName,ParameterValue=s3.nvncloud.me
   # ParameterKey=DBSecurityGroup,ParameterValue=sg-de6036a9 \
   # ParameterKey=DBSubnetGroupName,ParameterValue=netstack-nvndbsubnetgroup-61ortlga93wb
 

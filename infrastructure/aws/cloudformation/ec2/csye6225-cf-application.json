@@ -78,7 +78,7 @@
                 "Ref": "DBName"
               },
 
-              "DBSecurityGroups": [{"Fn::ImportValue" : "GroupName"}],
+              "VPCSecurityGroups": [{"Fn::ImportValue" : "RDSGroupName"}],
               "DBSubnetGroupName": {"Fn::ImportValue" : "DBSubnetGroupName"}
             },
             "DeletionPolicy": "Snapshot"
