@@ -19,8 +19,8 @@ public class ConfigMVC extends WebMvcConfigurerAdapter{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/profilepic/**")
-                .addResourceLocations("file://"+environment.getProperty("local.image.path"));
+                .addResourceHandler("/profilepics/**")
+                .addResourceLocations("file:///home/nandeep/Pictures/nvncloudpics/");
 
         registry
                 .addResourceHandler("/resources/**")
