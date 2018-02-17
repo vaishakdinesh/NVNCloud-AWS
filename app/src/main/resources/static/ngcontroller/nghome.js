@@ -30,6 +30,7 @@ app.controller('profileCtlr', ['$scope','getLoggedInUser',
 	
 	$scope.update = function(){
 		updateAboutMe.updateInfo($scope.user.userId,$scope.about)
+		$scope.disable();
 	}
 	
 	$scope.openModal = function(event){
