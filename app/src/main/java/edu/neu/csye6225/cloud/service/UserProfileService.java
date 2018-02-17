@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import  org.apache.commons.io.*;
 
 
 @Service
@@ -59,9 +58,11 @@ public class UserProfileService implements IUserProfileService{
     private String store(MultipartFile file, int userId) {
 
 
-        File desPath = new File(environment.getProperty("local.image.path") + userId + FilenameUtils.getExtension(file.getOriginalFilename()));
+        File desPath = new File(environment.getProperty("local.image.path") + "profilepics/" + userId);
         try {
             file.transferTo(desPath);
+            Path p = Paths.get(desPath.toString());
+            System.out.println(p.toFile().getName());
             return desPath.toString();
         } catch (IOException e) {
             System.out.println(e.getMessage());

@@ -27,7 +27,9 @@ public class ConfigSpringSecurity extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http
         .authorizeRequests()
-        .antMatchers("/","/css/**", "/images/**", "/js/**", "/scss/**","/email-check", "/register-user", "/register-confirmation", "/log-in","/viewprofile/**").permitAll()
+
+
+        .antMatchers("/","/profilepics/**","/css/**", "/images/**", "/js/**", "/scss/**","/email-check", "/register-user", "/register-confirmation", "/log-in","/viewprofile/**").permitAll()
         .antMatchers("/welcome").hasAnyAuthority("USER")
         .and()
         .formLogin()
