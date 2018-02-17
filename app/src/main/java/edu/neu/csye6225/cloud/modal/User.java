@@ -4,6 +4,9 @@ import edu.neu.csye6225.cloud.enums.Role;
 
 import javax.persistence.*;
 
+import org.springframework.stereotype.Component;
+
+@Component
 @Entity
 @Table(name = "users")
 public class User {
@@ -35,6 +38,10 @@ public class User {
     @Column (name = "token", nullable = false, unique = true)
     private String token;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "userprofile")
+    private UserProfile userProfile;
+
     public User(){}
 
     public User(User user){
@@ -46,6 +53,7 @@ public class User {
         this.lastName = user.getLastName();
         this.token = user.getToken();
         this.isActive = user.isActive();
+        this.userProfile = user.getUserProfile();
     }
 
     public int getUserId() {
@@ -110,5 +118,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

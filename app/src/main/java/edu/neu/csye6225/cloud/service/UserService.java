@@ -2,8 +2,10 @@ package edu.neu.csye6225.cloud.service;
 
 import edu.neu.csye6225.cloud.enums.Role;
 import edu.neu.csye6225.cloud.modal.User;
+import edu.neu.csye6225.cloud.modal.UserProfile;
 import edu.neu.csye6225.cloud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,18 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private Environment env;
+    
+    
 
     @Override
+	public User findUserByUserId(int id) {
+		User user = userRepository.findUserByUserId(id);
+		return user;
+	}
+
+	@Override
     public User findUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email);
         return user;
@@ -35,6 +47,9 @@ public class UserService implements IUserService {
         newUser.setRole(Role.USER);
         newUser.setToken(issueUniqueToken());
         newUser.setActive(false);
+        UserProfile up = new UserProfile();
+        up.setProfilePicUrl(env.getProperty("s3bucket.default.picture.url"));
+        newUser.setUserProfile(up);
         User user = userRepository.save(newUser);
         return user;
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="homeApp">
 
 <head>
 
@@ -7,21 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+	<base href="/welcome">
     <title>Could Application</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+	
+	<!-- Fonts for glyphicons -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
 
     <!-- Custom styles for this template -->
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
+    <style type="text/css">
+    	ul li{
+    		margin-right:10px;
+    	}
+    </style>
 </head>
 
-<body ng-app="homeApp" ng-controller="logoutCtlr">
+<body ng-controller="logoutCtlr">
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
@@ -31,7 +40,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
+            	<li class="nav-item">
+            		<a class="btn btn-primary btn-md rounded-pill mt-1" href="/welcome">
+            		home
+            		</a>
+            	</li>
+            	<li class="nav-item">
+            		<a class="btn btn-primary btn-md rounded-pill mt-1" href="/welcome/profile">
+            		about me
+            		</a>
+            	</li>
+            	<li class="nav-item">
                     <input type="button" class="btn btn-primary btn-md rounded-pill mt-1"
                            value="Logout" ng-click="logoutuser()"/>
                 </li>
@@ -53,77 +72,30 @@
     <div class="bg-circle-4 bg-circle"></div>
 </header>
 
-<section>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-2">
-                <div class="p-5">
-                    <img class="img-fluid rounded-circle" src="images/01.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6 order-lg-1">
-                <div class="p-5">
-                    <h2 class="display-4">Vaishak Dinesh...</h2>
-                    <p>CEO</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="p-5">
-                    <img class="img-fluid rounded-circle" src="images/02.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="p-5">
-                    <h2 class="display-4">Nithin Kartha!!!</h2>
-                    <p>chief new kid officer</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-2">
-                <div class="p-5">
-                    <img class="img-fluid rounded-circle" src="images/03.JPG" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6 order-lg-1">
-                <div class="p-5">
-                    <h2 class="display-4">Nandeep Nelagondanahalli!</h2>
-                    <p>Springboot Specialist.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div id="main" ng-view>
+    <!-- views will be injected here -->
+</div>
 
 <!-- Footer -->
 <footer class="py-5 bg-black">
     <div class="container">
-        <p class="m-0 text-center text-white small">Copyright &copy; Csye6225-Spring2018</p>
+        <p class="m-0 text-center text-white small">Copyright &copy; Csye6225-Spring2018!</p>
     </div>
     <!-- /.container -->
 </footer>
-
-<!-- Angular Min Scripts -->
-<script type="text/javascript" src="js/angular/angular.min.js"></script>
 
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery/jquery.min.js"></script>
 <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
 
+<!-- Angular Min Scripts -->
+<script src="js/angular/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-css/1.0.8/angular-css.min.js"></script>
+<script src="js/app.js"></script>
+
 <!-- Javascript file for index.html-->
-<script src="js/index.js"></script>
+<script src="ngcontroller/nghome.js"></script>
 </body>
 
 </html>

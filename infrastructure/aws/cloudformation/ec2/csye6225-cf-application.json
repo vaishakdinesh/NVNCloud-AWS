@@ -1,14 +1,136 @@
-{  "BlockDeviceMappings": [
-        {
-            "DeviceName" :  "/dev/sda1",
-            "Ebs" : {
-               "VolumeType" : "gp2",
-               "VolumeSize" : 16,
-               "DeleteOnTermination" : false
-           }
-        }
-    ],
-    "ImageId": "ami-66506c1c",
-    "InstanceType": "t2.micro",
-    "DryRun": false
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "csye6225 cloudformation application stack",
+
+  "Parameters": {
+
+  		"DBName": {
+  			"Description": "Database Name",
+  			"Type": "String"
+  		},
+  		"DBUser": {
+  			"Description": "Database User",
+  			"Type": "String"
+  		},
+  		"DBPassword": {
+  			"Description": "Database Password",
+  			"Type": "String"
+  		},
+
+  		"bucketName": {
+  			"Description": "Bucket name",
+  			"Type": "String"
+  		},
+      "DBEngine": {
+        "Description": "DB Engine",
+  			"Type": "String"
+      },
+      "DBAllocatedStorage": {
+        "Description": "DB AllocatedStorage",
+  			"Type": "String"
+      },
+      "DBEngineVersion": {
+        "Description": "DB EngineVersion",
+  			"Type": "String"
+      },
+      "DBInstanceClass": {
+        "Description": "DB InstanceClass",
+  			"Type": "String"
+      },
+      "DBInstanceIdentifier": {
+        "Description": "DBInstanceIdentifier",
+  			"Type": "String"
+      },
+
+      "EC2ImageId":{
+        "Description": "EC2 ImageId",
+  			"Type": "String"
+      },
+      "EC2InstanceType":{
+        "Description": "EC2 InstanceType",
+  			"Type": "String"
+      },
+      "EbsDeviceName" : {
+        "Description": "Ebs DeviceName",
+  			"Type": "String"
+      },
+      "EbsVolumeType" : {
+        "Description": "Ebs VolumeType",
+  			"Type": "String"
+      },
+      "EbsVolumeSize" : {
+        "Description": "Ebs VolumeSize",
+  			"Type": "Number"
+      }
+    },
+
+
+  "Resources" : {
+    "myDynamoDBTable": {
+  		      "Type": "AWS::DynamoDB::Table",
+  		      "Properties": {
+  			"AttributeDefinitions": [
+  			  {
+  			    "AttributeName": "Id",
+  			    "AttributeType": "S"
+  			  }
+  			],
+  			"KeySchema": [
+  			  {
+  			    "AttributeName": "Id",
+  			    "KeyType": "HASH"
+  			  }
+  			],
+  			"ProvisionedThroughput": {
+  			  "ReadCapacityUnits": "5",
+  			  "WriteCapacityUnits": "5"
+  			},
+  			"TableName": "csye6225"
+  		      }
+		    },
+    "myS3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": { "Ref": "bucketName" }
+            }
+        },
+
+        "MyDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+              "Engine": { "Ref": "DBEngine"},
+              "AllocatedStorage": { "Ref": "DBAllocatedStorage"},
+              "EngineVersion": { "Ref": "DBEngineVersion"},
+              "DBInstanceClass": { "Ref": "DBInstanceClass"},
+              "MultiAZ": "false",
+              "DBInstanceIdentifier": { "Ref": "DBInstanceIdentifier"},
+              "MasterUsername": { "Ref": "DBUser" },
+              "MasterUserPassword": { "Ref": "DBPassword" },
+              "PubliclyAccessible": "false",
+              "DBName": { "Ref": "DBName" },
+              "VPCSecurityGroups": [{ "Fn::ImportValue" : "RDSGroupName" }],
+              "DBSubnetGroupName": { "Fn::ImportValue" : "DBSubnetGroupName" }
+            },
+            "DeletionPolicy": "Snapshot"
+          },
+
+    "EC2Instance": {
+    			"Type": "AWS::EC2::Instance",
+    			"Properties": {
+    				"ImageId": { "Ref": "EC2ImageId" },
+    				"InstanceType": { "Ref": "EC2InstanceType" },
+            "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
+            "BlockDeviceMappings": [
+                 {
+                     "DeviceName" : { "Ref": "EbsDeviceName"},
+                     "Ebs" : {
+                        "VolumeType" : { "Ref": "EbsVolumeType"},
+                        "VolumeSize" :{ "Ref": "EbsVolumeSize"},
+                        "DeleteOnTermination" : false
+                    }
+                 }
+             ]
+          }
+          }
+}
 }

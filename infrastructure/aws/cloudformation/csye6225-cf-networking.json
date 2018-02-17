@@ -12,7 +12,7 @@
             "Type":"AWS::EC2::VPC",
             "Properties":{
               "CidrBlock": "10.0.0.0/16",
-              "EnableDnsSupport":"true",
+              "EnableDnsSupport":true,
               "InstanceTenancy": "default",
                   "Tags": [{"Key": "Name","Value": {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-vpc"]]}
                       }]
@@ -43,6 +43,15 @@
            }
          },
 
+         "PrivateRouteTable" : {
+           "Type" : "AWS::EC2::RouteTable",
+           "Properties" : {
+             "VpcId" : {"Ref" : "VPC"},
+             "Tags" : [ {"Key" : "Name", "Value" : {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-private-route-table"]]}
+             }]
+           }
+         },
+
          "Route" : {
            "Type" : "AWS::EC2::Route",
            "DependsOn" : "AttachGateway",
@@ -50,6 +59,133 @@
              "RouteTableId" : { "Ref" : "RouteTable" },
              "DestinationCidrBlock" : "0.0.0.0/0",
              "GatewayId" : { "Ref" : "InternetGateway" }
-           }}
+           }
+         },
+
+         "PublicSubnet" : {
+           "Type" : "AWS::EC2::Subnet",
+           "Properties" : {
+              "Tags" : [ {"Key" : "Name", "Value" :"csye6225-PublicSubnet"} ],
+              "VpcId" : { "Ref" : "VPC" },
+              "MapPublicIpOnLaunch" : true,
+              "CidrBlock" : "10.0.0.0/24",
+              "AvailabilityZone" : "us-east-1a"
+            }
+         },
+
+         "PublicSubnetRouteTableAssociation" : {
+           "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+           "Properties" : {
+              "SubnetId" : { "Ref" : "PublicSubnet" },
+              "RouteTableId" : { "Ref" : "RouteTable" }
+           }
+         },
+
+         "DBServerSubnet1" : {
+           "Type" : "AWS::EC2::Subnet",
+           "Properties" : {
+              "Tags" : [ {"Key" : "Name", "Value" :"csye6225-DBSubnet1"} ],
+              "VpcId" : { "Ref" : "VPC" },
+              "CidrBlock" : "10.0.1.0/24",
+              "AvailabilityZone" : "us-east-1a"
          }
+       },
+         "DBServerSubnet2" : {
+           "Type" : "AWS::EC2::Subnet",
+           "Properties" : {
+              "Tags" : [ {"Key" : "Name", "Value" :"csye6225-DBSubnet2"} ],
+              "VpcId" : { "Ref" : "VPC" },
+              "CidrBlock" : "10.0.2.0/24",
+              "AvailabilityZone" : "us-east-1b"
+         }
+       },
+         "NVNDBSubnetGroup": {
+                     "Type": "AWS::RDS::DBSubnetGroup",
+                     "Properties": {
+                         "DBSubnetGroupDescription": "Subnet group for RDS",
+                         "Tags" : [ {"Key" : "Name", "Value" :"csye6225-DBSubnetGroup"}],
+                         "SubnetIds": [{
+                             "Ref": "DBServerSubnet1"
+                         },
+                         {
+                             "Ref": "DBServerSubnet2"
+                         }]
+                     }
+                 },
+         "DBSubnetRouteTableAssociation1" : {
+           "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+           "Properties" : {
+              "SubnetId" : { "Ref": "DBServerSubnet1" },
+              "RouteTableId" : { "Ref" : "PrivateRouteTable" }
+           }
+         },
+         "DBSubnetRouteTableAssociation2" : {
+           "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+           "Properties" : {
+              "SubnetId" : { "Ref": "DBServerSubnet2" },
+              "RouteTableId" : { "Ref" : "PrivateRouteTable" }
+           }
+         },
+
+         "NVNCloudSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+              "Tags" : [ {"Key" : "Name", "Value" :"csye6225-webapp"}],
+              "GroupDescription": " security group for ec2 instances that will host web application",
+              "VpcId": { "Ref": "VPC"},
+              "SecurityGroupIngress" : [
+                {
+                  "IpProtocol" : "tcp",
+                  "FromPort" : "22",
+                  "ToPort" : "22",
+                  "CidrIp" : "0.0.0.0/0"
+                },
+                {
+                    "IpProtocol" : "tcp",
+                    "FromPort" : "80",
+                    "ToPort" : "80",
+                    "CidrIp" : "0.0.0.0/0"
+               },
+               {
+                   "IpProtocol" : "tcp",
+                   "FromPort" : "443",
+                   "ToPort" : "443",
+                   "CidrIp" : "0.0.0.0/0"
+              }]
+            }
+          },
+
+          "NVNCloudRDSSecurityGroup": {
+             "Type": "AWS::EC2::SecurityGroup",
+             "Properties": {
+               "Tags" : [ {"Key" : "Name", "Value" :"csye6225-rds"}],
+               "GroupDescription": "Security group for RDS instances",
+               "VpcId": { "Ref": "VPC"},
+               "SecurityGroupIngress" : [
+                 {
+                   "IpProtocol" : "tcp",
+                   "FromPort" : "3306",
+                   "ToPort" : "3306",
+                   "SourceSecurityGroupId" : { "Ref" : "NVNCloudSecurityGroup"}
+                }]
+             }
+           }
+    },
+    "Outputs": {
+      "GroupName": {
+        "Description": "Name of NVNCloudRDSSecurityGroup",
+        "Value": { "Ref": "NVNCloudRDSSecurityGroup"},
+        "Export" : { "Name" : "RDSGroupName" }
+      },
+      "DBSubnetGroupName":{
+        "Description": "Name of DBSubnetGroup",
+        "Value": { "Ref": "NVNDBSubnetGroup"},
+        "Export" : { "Name" : "DBSubnetGroupName" }
+      },
+      "PublicSubnet":{
+        "Description": "Public subnet for EC2",
+        "Value": { "Ref": "PublicSubnet"},
+        "Export" : { "Name":"PublicSubnet" }
+      }
+    }
   }
