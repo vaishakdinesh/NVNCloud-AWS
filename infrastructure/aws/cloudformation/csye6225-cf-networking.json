@@ -12,7 +12,7 @@
             "Type":"AWS::EC2::VPC",
             "Properties":{
               "CidrBlock": "10.0.0.0/16",
-              "EnableDnsSupport":"true",
+              "EnableDnsSupport":true,
               "InstanceTenancy": "default",
                   "Tags": [{"Key": "Name","Value": {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-vpc"]]}
                       }]
@@ -67,6 +67,7 @@
            "Properties" : {
               "Tags" : [ {"Key" : "Name", "Value" :"csye6225-PublicSubnet"} ],
               "VpcId" : { "Ref" : "VPC" },
+              "MapPublicIpOnLaunch" : true,
               "CidrBlock" : "10.0.0.0/24",
               "AvailabilityZone" : "us-east-1a"
             }
@@ -180,6 +181,11 @@
         "Description": "Name of DBSubnetGroup",
         "Value": { "Ref": "NVNDBSubnetGroup"},
         "Export" : { "Name" : "DBSubnetGroupName" }
+      },
+      "PublicSubnet":{
+        "Description": "Public subnet for EC2",
+        "Value": { "Ref": "PublicSubnet"},
+        "Export" : { "Name":"PublicSubnet" }
       }
     }
   }
