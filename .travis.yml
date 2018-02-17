@@ -11,7 +11,7 @@ script:
 - cd app
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 - cd target
-- la -al
+- ls -al
 - cd ..
 - pwd
 
