@@ -31,8 +31,8 @@ public class UserProfileService implements IUserProfileService{
     }
 
     @Override
-    public UserProfile updateUserProfileAboutMe(String userEmail, String aboutMe) {
-        UserProfile userProfile = userRepository.findUserByEmail(userEmail).getUserProfile();
+    public UserProfile updateUserProfileAboutMe(int id, String aboutMe) {
+        UserProfile userProfile = userRepository.findUserByUserId(id).getUserProfile();
         userProfile.setAboutMe(aboutMe);
         UserProfile savedUserProfile = userProfileRepository.save(userProfile);
         return savedUserProfile;

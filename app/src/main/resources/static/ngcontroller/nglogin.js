@@ -1,6 +1,6 @@
 /**
- *1. Angular controller to check duplicate user name and mobile for user registration
- *2. For Player and Ground Crew registration
+ *1. Angular controller to check duplicate user name for user registration
+ *
  */
 
 var app = angular.module('loginApp', []);
