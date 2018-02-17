@@ -21,7 +21,7 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/welcome")
-    public String goWelcome(Principal principal, HttpServletRequest request){
+    public String goWelcome(){
     	return "home.html";
     }
 

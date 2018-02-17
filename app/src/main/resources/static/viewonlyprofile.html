@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="homeApp">
+<html lang="en">
 
 <head>
 
@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-	<base href="/welcome">
-    <title>Could Application</title>
+	<title>Cloud Application</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
@@ -23,14 +22,18 @@
 
     <!-- Custom styles for this template -->
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
+    <link href="css/profile.css" rel="stylesheet">
     <style type="text/css">
     	ul li{
-    		margin-right:10px;
+    		display:none;
+    	}
+    	#edit{
+    		display:none;
     	}
     </style>
 </head>
 
-<body ng-controller="logoutCtlr">
+<body>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
@@ -72,10 +75,35 @@
     <div class="bg-circle-4 bg-circle"></div>
 </header>
 
-<div id="main" ng-view>
-    <!-- views will be injected here -->
-</div>
-
+<header class="header">
+   <div class="container">
+      <div class="row align-items-center">
+         <div class="col-lg-6 order-lg-2">
+            <div class="p-5">
+               <img class="img-fluid rounded-circle" src="images/default.jpg" 
+               		alt="Profile Picture" id="myImg"/>
+            </div>
+         </div>
+         <div class="col-lg-6 order-lg-1">
+            <div class="col-md-8 col-md-offset-2">
+               <h2><span id="username">Vaishak Dinesh</span></h2>
+               <h3>Something about me</h3>
+               <div data-spy="scroll" class="tabbable-panel">
+                  <div class="tabbable-line">
+                  </div>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="tab_default_1">
+                        <p><textarea id="intro" rows="5" cols="50" 
+                        		class="textarea" placeholder="Describe yourself here..." disabled>
+                        </textarea></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
 <!-- Footer -->
 <footer class="py-5 bg-black">
     <div class="container">
@@ -85,17 +113,13 @@
 </footer>
 
 <!-- Bootstrap core JavaScript -->
-<script src="js/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
 
-<!-- Angular Min Scripts -->
-<script src="js/angular/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-css/1.0.8/angular-css.min.js"></script>
-<script src="js/app.js"></script>
-
 <!-- Javascript file for index.html-->
-<script src="ngcontroller/nghome.js"></script>
+
+<script src="js/viewonlyprofile.js"></script>
 </body>
 
 </html>

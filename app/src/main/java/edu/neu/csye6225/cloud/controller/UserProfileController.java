@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,5 +55,22 @@ public class UserProfileController {
 	@RequestMapping(value ="/profile/update/picture/{id}", method = RequestMethod.POST)
 	public String uploadProfilePic(){
 		return "";
+	}
+	
+	/**
+	 * 
+	 * @return returns the view only version of the profile
+	 */
+	@RequestMapping(value="/viewprofile", method=RequestMethod.GET)
+	public String viewOnlyProfile(){
+		return "viewonlyprofile.html";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getuserprofile", method=RequestMethod.GET)
+	public User getUserToView(@RequestParam String email){
+		user = null;
+		user = userService.findUserByEmail(email);
+		return user;
 	}
 }
