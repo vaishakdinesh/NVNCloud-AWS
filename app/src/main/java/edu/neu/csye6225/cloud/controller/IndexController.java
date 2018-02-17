@@ -1,7 +1,12 @@
 package edu.neu.csye6225.cloud.controller;
 
+import java.security.Principal;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class IndexController {
@@ -17,7 +22,12 @@ public class IndexController {
 
     @RequestMapping(value = "/welcome")
     public String goWelcome(){
-        return "home.html";
+    	return "home.html";
+    }
+
+    @RequestMapping("/hw")
+    public @ResponseBody String greeting() {
+        return "Hello World";
     }
 
 }
