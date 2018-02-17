@@ -59,7 +59,7 @@ public class UserProfileService implements IUserProfileService{
     private String store(MultipartFile file, int userId) {
 
 
-        File desPath = new File(environment.getProperty("local.image.path") + userId + FilenameUtils.getExtension(file.getOriginalFilename()));
+        File desPath = new File(environment.getProperty("local.image.path") + "profilepic/" + userId + FilenameUtils.getExtension(file.getOriginalFilename()));
         try {
             file.transferTo(desPath);
             return desPath.toString();
