@@ -22,9 +22,16 @@ public class UserService implements IUserService {
 
     @Autowired
     private Environment env;
-
+    
+    
 
     @Override
+	public User findUserByUserId(int id) {
+		User user = userRepository.findUserByUserId(id);
+		return user;
+	}
+
+	@Override
     public User findUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email);
         return user;
