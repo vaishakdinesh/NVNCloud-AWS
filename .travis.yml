@@ -7,13 +7,28 @@ install: true
 
 
 script:
-- pwd
-- cd app
-- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-- cd target
-- ls -al
-- cd ..
-- pwd
+  - pwd
+  - cd app
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - cd target
+  - ls -al
+  - cd ..
+  - pwd
+  - ls -al
+
+after_success:
+  - pwd
+  - ls -al
+  - mkdir codedeploy_artifact
+  - zip -r csye6225-lab-$TRAVIS_JOB_NUMBER.zip app/target/huskycloud.war infrastructure/aws/codedeploy/appspec.yml
+  - ls -al
+  - pwd
+  - cd codedeploy_artifact
+  - ls -al
+  - pwd
+  - cd ..
+  - pwd
+  - ls -al  
 
 
 notifications:
