@@ -17,11 +17,51 @@
   			"Type": "String"
   		},
 
-
   		"bucketName": {
   			"Description": "Bucket name",
   			"Type": "String"
-  		}
+  		},
+      "DBEngine": {
+        "Description": "DB Engine",
+  			"Type": "String"
+      },
+      "DBAllocatedStorage": {
+        "Description": "DB AllocatedStorage",
+  			"Type": "String"
+      },
+      "DBEngineVersion": {
+        "Description": "DB EngineVersion",
+  			"Type": "String"
+      },
+      "DBInstanceClass": {
+        "Description": "DB InstanceClass",
+  			"Type": "String"
+      },
+      "DBInstanceIdentifier": {
+        "Description": "DBInstanceIdentifier",
+  			"Type": "String"
+      },
+
+      "EC2ImageId":{
+        "Description": "EC2 ImageId",
+  			"Type": "String"
+      },
+      "EC2InstanceType":{
+        "Description": "EC2 InstanceType",
+  			"Type": "String"
+      },
+      "EbsDeviceName" : {
+        "Description": "Ebs DeviceName",
+  			"Type": "String"
+      },
+      "EbsVolumeType" : {
+        "Description": "Ebs VolumeType",
+  			"Type": "String"
+      },
+      "EbsVolumeSize" : {
+        "Description": "Ebs VolumeSize",
+  			"Type": "Number"
+      }
     },
 
 
@@ -51,35 +91,25 @@
     "myS3Bucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-
-              "BucketName": {
-                "Ref": "bucketName"
-              }
+              "BucketName": { "Ref": "bucketName" }
             }
         },
 
         "MyDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-              "Engine": "MySQL",
-              "AllocatedStorage": "100",
-              "EngineVersion": "5.6.37",
-              "DBInstanceClass": "db.t2.medium",
+              "Engine": { "Ref": "DBEngine"},
+              "AllocatedStorage": { "Ref": "DBAllocatedStorage"},
+              "EngineVersion": { "Ref": "DBEngineVersion"},
+              "DBInstanceClass": { "Ref": "DBInstanceClass"},
               "MultiAZ": "false",
-              "DBInstanceIdentifier": "csye6225-spring2018",
-              "MasterUsername": {
-                "Ref": "DBUser"
-              },
-              "MasterUserPassword": {
-                "Ref": "DBPassword"
-              },
+              "DBInstanceIdentifier": { "Ref": "DBInstanceIdentifier"},
+              "MasterUsername": { "Ref": "DBUser" },
+              "MasterUserPassword": { "Ref": "DBPassword" },
               "PubliclyAccessible": "false",
-              "DBName": {
-                "Ref": "DBName"
-              },
-
-              "VPCSecurityGroups": [{"Fn::ImportValue" : "RDSGroupName"}],
-              "DBSubnetGroupName": {"Fn::ImportValue" : "DBSubnetGroupName"}
+              "DBName": { "Ref": "DBName" },
+              "VPCSecurityGroups": [{ "Fn::ImportValue" : "RDSGroupName" }],
+              "DBSubnetGroupName": { "Fn::ImportValue" : "DBSubnetGroupName" }
             },
             "DeletionPolicy": "Snapshot"
           },
@@ -87,14 +117,15 @@
     "EC2Instance": {
     			"Type": "AWS::EC2::Instance",
     			"Properties": {
-    				"ImageId": "ami-66506c1c",
-    				"InstanceType": "t2.micro",
+    				"ImageId": { "Ref": "EC2ImageId" },
+    				"InstanceType": { "Ref": "EC2InstanceType" },
+            "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
             "BlockDeviceMappings": [
                  {
-                     "DeviceName" :  "/dev/sda1",
+                     "DeviceName" : { "Ref": "EbsDeviceName"},
                      "Ebs" : {
-                        "VolumeType" : "gp2",
-                        "VolumeSize" : 16,
+                        "VolumeType" : { "Ref": "EbsVolumeType"},
+                        "VolumeSize" :{ "Ref": "EbsVolumeSize"},
                         "DeleteOnTermination" : false
                     }
                  }
