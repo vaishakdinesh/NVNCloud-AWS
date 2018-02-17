@@ -19,6 +19,7 @@ import edu.neu.csye6225.cloud.modal.UserProfile;
 import edu.neu.csye6225.cloud.service.IUserProfileService;
 import edu.neu.csye6225.cloud.service.IUserService;
 import edu.neu.csye6225.cloud.service.UserService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class UserProfileController {
@@ -53,8 +54,9 @@ public class UserProfileController {
 	}
 	
 	@RequestMapping(value ="/profile/update/picture/{id}", method = RequestMethod.POST)
-	public String uploadProfilePic(){
-		return "";
+	public String uploadProfilePic(@PathVariable Integer id, @RequestParam MultipartFile file){
+		userProfileService.updateUserProfilePicUrl(id, file);
+		return "redirect:/welcome";
 	}
 	
 	/**
