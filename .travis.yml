@@ -22,6 +22,7 @@ after_success:
   - mkdir codedeploy_artifact
   - zip -r csye6225-lab-$TRAVIS_JOB_NUMBER.zip app/target/huskycloud.war infrastructure/aws/codedeploy/appspec.yml
   - ls -al
+  - mv csye6225-lab-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
   - pwd
   - cd codedeploy_artifact
   - ls -al
