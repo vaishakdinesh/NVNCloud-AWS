@@ -5,9 +5,19 @@ jdk:
 sudo: false
 install: true
 
+branches:
+  only:
+  - $branch
+
 script:
+- pwd
 - cd app
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+- cd target
+- la -al
+- cd ..
+- pwd
+
 
 notifications:
 email:
