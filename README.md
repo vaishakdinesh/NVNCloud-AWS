@@ -11,6 +11,7 @@ Clone the repository to get a local copy of the project. This is a spring boot a
 3. MySql server has to be installed in your machine. The workbench for mysql is optional.
 4. An IDE such as Intellij
 5. Mysql workbench (optional). The workbench gives your a GUI to access your databases.
+6. Install apache tomcat.
 
 ### Installing
 
@@ -74,9 +75,132 @@ A successful installation will result in the following output after running the 
 ```
 MYSQL Workbench CE (GPL) 6.3.6 CE build 511
 ```
+
+6. Apache Tomcat
+First, create a new tomcat group:
+```
+sudo groupadd tomcat
+```
+Next, create a new tomcat user. We'll make this user a member of the tomcat group, with a home directory of /opt/tomcat (where we will install Tomcat), and with a shell of /bin/false (so nobody can log into the account):
+```
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+```
+Now that our tomcat user is set up, let's download and install Tomcat. The best way to install Tomcat 8 is to download the latest binary release then configure it manually.
+Next, change to the /tmp directory on your server. This is a good directory to download ephemeral items, like the Tomcat tarball, which we won't need after extracting the Tomcat contents:
+```
+cd /tmp
+```
+Download the latest version from the apache site to the /tmp directory, then:
+```
+sudo mkdir /opt/tomcat
+sudo tar xzvf <apache.your.version.tar.gz> -C /opt/tomcat --strip-components=1
+```
+The tomcat user that we set up needs to have access to the Tomcat installation. We'll set that up now.
+```
+cd /opt/tomcat
+```
+Give the tomcat group ownership over the entire installation directory:
+```
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+```
+Make the tomcat user the owner of the webapps, work, temp, and logs directories:
+```
+sudo chown -R tomcat webapps/ work/ temp/ logs/
+```
+We want to be able to run Tomcat as a service, so we will set up systemd service file.
+
+Tomcat needs to know where Java is installed. This path is commonly referred to as "JAVA_HOME". The easiest way to look up that location is by running this command:
+```
+sudo update-java-alternatives -l
+```
+```
+Output
+java-1.8.0-openjdk-amd64       1081       /usr/lib/jvm/java-1.8.0-openjdk-amd64
+```
+The correct ```JAVA_HOME``` variable can be constructed by taking the output from the last column (highlighted in red) and appending /jre to the end. Given the example above, the correct ```JAVA_HOME``` for this server would be:
+
+```
+JAVA_HOME
+/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+```
+Your ```JAVA_HOME``` may be different.
+
+
+With this piece of information, we can create the systemd service file. Open a file called tomcat.service in the /etc/systemd/system directory by typing:
+
+```
+sudo nano /etc/systemd/system/tomcat.service
+```
+Paste the following contents into your service file. Modify the value of JAVA_HOME if necessary to match the value you found on your system. You may also want to modify the memory allocation settings that are specified in CATALINA_OPTS:
+```
+/etc/systemd/system/tomcat.service
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+When you are finished, save and close the file.
+
+Next, reload the systemd daemon so that it knows about our service file:
+```
+sudo systemctl daemon-reload
+```
+Start the Tomcat service by typing:
+```
+sudo systemctl start tomcat
+```
+
+Double check that it started without errors by typing:
+```
+sudo systemctl status tomcat
+```
+
+
+
 ## Running the tests
 
 The unit tests can be found under the test package. The unit tests test various controller actions and methods present in the classes. The unit test were developed using Junit 4.
+
+The unit test can be run using the command:
+```
+mvn test
+```
+A successful completion of the test suite will result in the following output:
+```
+Results :
+
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 25.748 s
+[INFO] Finished at: 2018-02-19T09:43:56-05:00
+[INFO] Final Memory: 38M/294M
+[INFO] ------------------------------------------------------------------------
+```
 
 ## Deployment
 
