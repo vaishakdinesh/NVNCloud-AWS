@@ -19,7 +19,7 @@ echo "Starting $StackName network setup"
 
 echo "Starting to create the stack......"
 
-echo "$DomainName is my s3 bucket....."
+echo "$DomainName is my web-app s3 bucket....."
 
 createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   --template-body file://csye6225-cf-application.json \
@@ -46,23 +46,23 @@ fi
 until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
   echo "Adding resources to the stack......"
 
-#ADD function to check resources
-myresources(){
-  resourceStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
-  if [ "$resourceStatus" = "CREATE_FAILED" ]; then
-    createFlag=false
-    echo "$@ creation failed! "
-    aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==`CREATE_FAILED`)]'
-    echo "deleting stack..... "
-    bash ./csye6225-aws-cf-terminate-application-stack.sh $StackName
-    break
-  fi
-}
+  #ADD function to check resources
+  myresources(){
+    resourceStatus=`aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==\`CREATE_FAILED\`)][ResourceStatus]' --output text`
+    if [ "$resourceStatus" = "CREATE_FAILED" ]; then
+      createFlag=false
+      echo "$@ creation failed! "
+      aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==`CREATE_FAILED`)]'
+      echo "deleting stack..... "
+      bash ./csye6225-aws-cf-terminate-application-stack.sh $StackName
+      break
+    fi
+  }
 
-myresources '`AWS::EC2::Instance`'
-myresources '`AWS::DynamoDB::Table`'
-myresources '`AWS::S3::Bucket`'
-myresources '`AWS::RDS::DBInstance`'
+  myresources '`AWS::EC2::Instance`'
+  myresources '`AWS::DynamoDB::Table`'
+  myresources '`AWS::S3::Bucket`'
+  myresources '`AWS::RDS::DBInstance`'
 
   stackstatus=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text`
   sleep 20

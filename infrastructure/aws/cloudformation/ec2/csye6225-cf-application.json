@@ -116,6 +116,14 @@
 
     "EC2Instance": {
     			"Type": "AWS::EC2::Instance",
+          "Metadata" : {
+            "AWS::CloudFormation::Init" : {
+              "config" : {
+                "packages" : {
+                  "yum" : {
+                    "java-1.8.0-openjdk" : [],
+                    "tomcat8" : []
+          }}}}},
     			"Properties": {
     				"ImageId": { "Ref": "EC2ImageId" },
     				"InstanceType": { "Ref": "EC2InstanceType" },
