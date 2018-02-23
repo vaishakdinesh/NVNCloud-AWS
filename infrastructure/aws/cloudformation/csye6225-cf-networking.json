@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "csye6225 cloud formation template",
+  "Description" : "csye6225 cloudformation network stack",
 
 "Mappings" : {
     "RegionMap" : {

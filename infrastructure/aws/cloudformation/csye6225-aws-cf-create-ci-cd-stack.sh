@@ -19,24 +19,10 @@ echo "Starting $StackName network setup"
 
 echo "Starting to create the stack......"
 
-echo "$DomainName is my web-app s3 bucket....."
+echo "$DomainName is my code-deploy s3 bucket....."
 
 createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
-  --template-body file://csye6225-cf-application.json \
-  --parameters ParameterKey=DBName,ParameterValue=csye6225 \
-  ParameterKey=DBUser,ParameterValue=csye6225master \
-  ParameterKey=DBPassword,ParameterValue=csye6225password \
-  ParameterKey=DBEngine,ParameterValue=MySQL \
-  ParameterKey=DBAllocatedStorage,ParameterValue=100 \
-  ParameterKey=DBEngineVersion,ParameterValue=5.6.37 \
-  ParameterKey=DBInstanceClass,ParameterValue=db.t2.medium \
-  ParameterKey=DBInstanceIdentifier,ParameterValue=csye6225-spring2018 \
-  ParameterKey=EC2ImageId,ParameterValue=ami-66506c1c \
-  ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
-  ParameterKey=EbsDeviceName,ParameterValue=/dev/sda1 \
-  ParameterKey=EbsVolumeType,ParameterValue=gp2 \
-  ParameterKey=EbsVolumeSize,ParameterValue=16 \
-  ParameterKey=bucketName,ParameterValue=$DomainName`
+  --template-body file://csye6225-cf-ci-cd.json `
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
@@ -59,10 +45,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     fi
   }
 
-  myresources '`AWS::EC2::Instance`'
-  myresources '`AWS::DynamoDB::Table`'
-  myresources '`AWS::S3::Bucket`'
-  myresources '`AWS::RDS::DBInstance`'
+  #myresources '`AWS::EC2::Instance`'
 
   stackstatus=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text`
   sleep 20
