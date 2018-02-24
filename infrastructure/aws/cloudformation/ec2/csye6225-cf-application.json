@@ -121,6 +121,7 @@
     			"Properties": {
     				"ImageId": { "Ref": "EC2ImageId" },
             "KeyName" : { "Ref": "KeyPairName" },
+            "IamInstanceProfile" :{"Fn::ImportValue" : "EC2InstanceProfile"},
     				"InstanceType": { "Ref": "EC2InstanceType" },
             "SecurityGroupIds" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
             "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
@@ -158,6 +159,18 @@
                  }
              ]
           }
+        }
+      },
+      "Outputs": {
+        "WebAppS3BucketName": {
+          "Description": "Web Application S3 Bucket Name",
+          "Value": { "Ref": "NVNCloudS3Bucket"},
+          "Export" : { "Name" : "WebAppS3BucketName" }
+        },
+        "EC2Instance": {
+          "Description": "EC2 Instance",
+          "Value": { "Ref": "EC2Instance"},
+          "Export" : { "Name" : "EC2Instance" }
         }
       }
 }
