@@ -36,6 +36,7 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=EbsDeviceName,ParameterValue=/dev/sda1 \
   ParameterKey=EbsVolumeType,ParameterValue=gp2 \
   ParameterKey=EbsVolumeSize,ParameterValue=16 \
+  ParameterKey=KeyPairName,ParameterValue=keypair \
   ParameterKey=bucketName,ParameterValue=$DomainName`
 
 if [ -z "$createStackStatus" ]; then
@@ -65,7 +66,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
   myresources '`AWS::RDS::DBInstance`'
 
   stackstatus=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text`
-  sleep 20
+  sleep 60
 done
 
 if [ "$createFlag" = true ]; then
