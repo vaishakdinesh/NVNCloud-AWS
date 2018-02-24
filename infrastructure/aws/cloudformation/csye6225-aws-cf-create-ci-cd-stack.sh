@@ -47,7 +47,14 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
     fi
   }
 
-  #myresources '`AWS::EC2::Instance`'
+  myresources '`AWS::S3::Bucket`'
+  myresources '`AWS::IAM::Policy`'
+  myresources '`AWS::IAM::InstanceProfile`'
+  myresources '`AWS::IAM::Role`'
+  myresources '`AWS::IAM::ManagedPolicy`'
+  myresources '`AWS::CodeDeploy::Application`'
+  myresources '`AWS::CodeDeploy::DeploymentConfig`'
+  myresources '`AWS::CodeDeploy::DeploymentGroup`'
 
   stackstatus=`aws cloudformation describe-stacks --stack-name $StackName --query 'Stacks[*][StackStatus]' --output text`
   sleep 20
