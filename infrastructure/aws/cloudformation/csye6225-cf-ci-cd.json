@@ -240,8 +240,8 @@
           "Properties" : {
             "DeploymentConfigName" : "NvnCloudDeployConfig",
             "MinimumHealthyHosts" : {
-              "Type" : "FLEET_PERCENT",
-              "Value" : "75"
+              "Type" : "HOST_COUNT",
+              "Value" : 1
             }
           }
       },
