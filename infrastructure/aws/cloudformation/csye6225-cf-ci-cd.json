@@ -1,3 +1,4 @@
+
 {
    "AWSTemplateFormatVersion":"2010-09-09",
    "Description":"csye6225 cloudformation ci-cd stack",
@@ -225,7 +226,8 @@
                      ]
                   }
                ]
-            }
+            },
+            "Users":["Travis"]
          }
       },
       "CodeDeployApplication": {
@@ -250,8 +252,8 @@
         "Properties": {
           "DeploymentGroupName": "NvnCloudDeployGroup",
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
-          "DeploymentConfigName" :{"Ref" :"CodeDeploymentConfig"},
-          "Ec2TagFilters": [{"Key":"aws:cloudformation:logical-id","Type":"KEY_AND_VALUE","Value":"EC2Instance"}],
+          "DeploymentConfigName" : {"Ref" :"CodeDeploymentConfig"},
+          "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
           "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }
       }
