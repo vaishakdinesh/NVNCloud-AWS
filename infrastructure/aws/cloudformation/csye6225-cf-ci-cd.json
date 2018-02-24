@@ -241,6 +241,10 @@
         "Type" : "AWS::CodeDeploy::DeploymentConfig",
           "Properties" : {
             "DeploymentConfigName" : "NvnCloudDeployConfig",
+            "DeploymentStyle": {
+              "DeploymentType": "IN_PLACE",
+              "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
+            },
             "MinimumHealthyHosts" : {
               "Type" : "HOST_COUNT",
               "Value" : 1
