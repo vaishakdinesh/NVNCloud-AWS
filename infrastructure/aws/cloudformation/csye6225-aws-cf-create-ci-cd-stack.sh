@@ -22,7 +22,9 @@ echo "Starting to create the stack......"
 echo "$DomainName is my code-deploy s3 bucket....."
 
 createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
-  --template-body file://csye6225-cf-ci-cd.json `
+  --template-body file://csye6225-cf-ci-cd.json \
+  --parameters ParameterKey=BucketName,ParameterValue=$DomainName \
+  --capabilities CAPABILITY_IAM`
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
