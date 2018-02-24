@@ -152,7 +152,7 @@
                                 {
                                   "Ref":"AWS::AccountId"
                                 },
-                                ":application:codedeploy-agent"
+                                ":application:nvn-codedeploy-app"
                              ]
                           ]
                        }
@@ -231,13 +231,14 @@
       "CodeDeployApplication": {
         "Type": "AWS::CodeDeploy::Application",
         "Properties": {
-          "ComputePlatform": "Server"
+          "ComputePlatform": "Server",
+          "ApplicationName": "nvn-codedeploy-app"
         }
       },
       "CodeDeploymentConfig":{
         "Type" : "AWS::CodeDeploy::DeploymentConfig",
           "Properties" : {
-            "DeploymentConfigName" : "NVNCloudDeploy",
+            "DeploymentConfigName" : "NvnCloudDeployConfig",
             "MinimumHealthyHosts" : {
               "Type" : "FLEET_PERCENT",
               "Value" : "75"
@@ -247,6 +248,7 @@
       "CodeDeploymentGroup":{
         "Type" : "AWS::CodeDeploy::DeploymentGroup",
         "Properties": {
+          "DeploymentGroupName": "NvnCloudDeployGroup",
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
           "DeploymentConfigName" :{"Ref" :"CodeDeploymentConfig"},
           "Ec2TagFilters": [{"Key":"aws:cloudformation:logical-id","Type":"KEY_AND_VALUE","Value":"EC2Instance"}],
