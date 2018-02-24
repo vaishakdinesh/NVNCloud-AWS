@@ -1,47 +1,47 @@
 <header class="header">
-   <div class="container">
-      <div class="row align-items-center">
-         <div class="col-lg-6 order-lg-2">
-            <div class="p-5">
-               <img class="img-fluid rounded-circle" src="images/01.jpg" 
-               		alt="Profile Picture" id="myImg" ng-click="openModal($event)"/>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <div class="p-5">
+                    <img class="img-fluid rounded-circle" ng-src="{{user.userProfile.profilePicUrl}}"
+                         alt="Profile Picture" id="myImg" ng-click="openModal($event)"/>
+                </div>
             </div>
-         </div>
-         <div class="col-lg-6 order-lg-1">
-            <div class="col-md-8 col-md-offset-2">
-               <h2>{{user.firstName}} {{user.lastName}}</h2>
-               <h3>Something about me</h3>
-               <div data-spy="scroll" class="tabbable-panel">
-                  <div class="tabbable-line">
-                  </div>
-                  <div class="tab-content">
-                     <div class="tab-pane active" id="tab_default_1">
-                        <p><textarea ng-model="about" id="intro" rows="5" cols="50" 
-                        		class="textarea" placeholder="Describe yourself here..." disabled>
+            <div class="col-lg-6 order-lg-1">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>{{user.firstName}} {{user.lastName}}</h2>
+                    <h3>Something about me</h3>
+                    <div data-spy="scroll" class="tabbable-panel">
+                        <div class="tabbable-line">
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_default_1">
+                                <p><textarea ng-model="about" id="intro" rows="5" cols="50"
+                                             class="textarea" placeholder="Describe yourself here..." disabled>
                         </textarea></p>
-                        <button ng-click="update()" class="btn btn-danger save hiding">Save</button>
-                        <button ng-click="disable()" class="btn btn-default save hiding">Cancel</button>
-                        <span id="edit" class="fa fa-edit editable" ng-click="edit()"></span>      
-                     </div>
-                  </div>
-               </div>
+                                <button ng-click="update()" class="btn btn-danger save hiding">Save</button>
+                                <button ng-click="disable()" class="btn btn-default save hiding">Cancel</button>
+                                <span id="edit" class="fa fa-edit editable" ng-click="edit()"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </header>
 <div id="picModal" class="modalDP">
-  <span class="closeWindow">&times;</span>
-  <img class="modal-content" id="img01">
-  <div id="caption" class="btn btn-danger btn-sm"><a href=""></a></div>
-  <button id="caption" class="btn btn-success btn-sm" ng-click="uploadFile()">upload</button>
-  <div class="picUpload"> 
-  <form method="post" enctype="multipart/form-data">
-  	<input type="hidden" name="filename" value="profile pic" />
-  	<input type="hidden" value="" id="picType" name="type"/>
-  	<input type="file" ng-model="myFile" id="uploadfile" file-model="myFile"/>
-  </form>   
-</div>
+    <span class="closeWindow">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption" class="btn btn-danger btn-sm"><a href=""></a></div>
+    <div class="picUpload">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="filename" value="profile pic" />
+            <input type="hidden" value="" id="picType" name="type"/>
+            <input type="file" ng-model="myFile" id="uploadfile" file-model="myFile"
+                   custom-on-change="uploadFile"/>
+        </form>
+    </div>
 </div>
 <!-- end of header section -->
 <!-- about section -->

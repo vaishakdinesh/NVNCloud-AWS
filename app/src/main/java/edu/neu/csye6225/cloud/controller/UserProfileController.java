@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.csye6225.cloud.modal.User;
 import edu.neu.csye6225.cloud.modal.UserProfile;
+import edu.neu.csye6225.cloud.service.IAmazonS3Client;
 import edu.neu.csye6225.cloud.service.IUserProfileService;
 import edu.neu.csye6225.cloud.service.IUserService;
 import edu.neu.csye6225.cloud.service.UserService;

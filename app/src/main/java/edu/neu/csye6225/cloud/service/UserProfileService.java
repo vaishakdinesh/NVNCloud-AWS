@@ -5,6 +5,7 @@ import edu.neu.csye6225.cloud.modal.UserProfile;
 import edu.neu.csye6225.cloud.repository.UserProfileRepository;
 import edu.neu.csye6225.cloud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,8 +18,8 @@ import java.nio.file.Paths;
 
 @Service
 public class UserProfileService implements IUserProfileService{
-
-    @Autowired
+	
+	@Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -26,6 +27,15 @@ public class UserProfileService implements IUserProfileService{
 
     @Autowired
     private Environment environment;
+    
+    @Value("${amazon.s3.default-bucket}")
+	private String bucketName;
+    
+    @Value("${amazon.s3.url}")
+	private String s3Url;
+
+    @Autowired
+	private IAmazonS3Client amazonS3Client;
 
     @Override
     public UserProfile findUserProfileByEmail(String userEmail) {
@@ -35,9 +45,12 @@ public class UserProfileService implements IUserProfileService{
 
     @Override
     public UserProfile updateUserProfilePicUrl(int id, MultipartFile file) {
-        UserProfile userProfile = userRepository.findUserByUserId(id).getUserProfile();
-        userProfile.setProfilePicUrl(store(file, id));
-        UserProfile savedUserProfile = userProfileRepository.save(userProfile);
+        User user = userRepository.findUserByUserId(id);
+        amazonS3Client.uploadFile(user.getEmail()+".jpg", file);
+        user
+        .getUserProfile()
+        .setProfilePicUrl(s3Url+"/"+bucketName+"/"+user.getEmail()+".jpg");
+        UserProfile savedUserProfile = userProfileRepository.save(user.getUserProfile());
         return savedUserProfile;
     }
 
@@ -56,9 +69,7 @@ public class UserProfileService implements IUserProfileService{
     }
 
     private String store(MultipartFile file, int userId) {
-
-
-        File desPath = new File(environment.getProperty("local.image.path") + "profilepics/" + userId);
+    	File desPath = new File(environment.getProperty("local.image.path") + "profilepics/" + userId);
         try {
             file.transferTo(desPath);
             Path p = Paths.get(desPath.toString());
