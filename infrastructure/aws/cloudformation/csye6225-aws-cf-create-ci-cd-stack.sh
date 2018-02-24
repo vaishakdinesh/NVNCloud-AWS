@@ -13,7 +13,7 @@ if [ -z "$DomainName" ]; then
   echo "No domain name provided. Script exiting.."
   exit 1
 fi
-DomainName=s3.csye6225-spring2018-$DomainName.me
+DomainName=code-deploy.$DomainName.me
 
 echo "Starting $StackName network setup"
 
@@ -24,7 +24,7 @@ echo "$DomainName is my code-deploy s3 bucket....."
 createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   --template-body file://csye6225-cf-ci-cd.json \
   --parameters ParameterKey=BucketName,ParameterValue=$DomainName \
-  --capabilities CAPABILITY_IAM`
+  --capabilities CAPABILITY_NAMED_IAM`
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
