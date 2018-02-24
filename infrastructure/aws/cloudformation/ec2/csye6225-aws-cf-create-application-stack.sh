@@ -13,7 +13,7 @@ if [ -z "$DomainName" ]; then
   echo "No domain name provided. Script exiting.."
   exit 1
 fi
-DomainName=s3.csye6225-spring2018-$DomainName.me
+DomainName=web-app.$DomainName.me
 
 echo "Starting $StackName network setup"
 
