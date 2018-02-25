@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: huskycloud.war
+  - source: ./app/target/huskycloud.war
     destination: /var/lib/tomcat8/webapps
 
 hooks:
