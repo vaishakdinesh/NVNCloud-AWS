@@ -2,19 +2,19 @@ version: 0.0
 os: linux
 
 files:
-  - source: ./app/target/huskycloud.war
+  - source: ./huskycloud.war
     destination: /var/lib/tomcat8/webapps
 
 hooks:
   AfterInstall:
-   - location: ./codedeploy/afterInstall.sh
+   - location: ./afterInstall.sh
      timeout: 180
      runas: ubuntu
   ApplicationStart:
-   - location: ./codedeploy/applicationStart.sh
+   - location: ./applicationStart.sh
      timeout: 180
      runas: ubuntu
   ValidateService:
-   - location: ./codedeploy/validateService.sh
+   - location: ./validateService.sh
      timeout: 180
      runas: ubuntu
