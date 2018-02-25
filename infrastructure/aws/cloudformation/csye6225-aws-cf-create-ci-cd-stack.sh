@@ -51,7 +51,6 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
   myresources '`AWS::IAM::Policy`'
   myresources '`AWS::IAM::InstanceProfile`'
   myresources '`AWS::IAM::Role`'
-  myresources '`AWS::IAM::ManagedPolicy`'
   myresources '`AWS::CodeDeploy::Application`'
   myresources '`AWS::CodeDeploy::DeploymentConfig`'
   myresources '`AWS::CodeDeploy::DeploymentGroup`'
