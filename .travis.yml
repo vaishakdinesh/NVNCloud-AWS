@@ -49,6 +49,8 @@ deploy:
     application: nvn-codedeploy-app
     deployment_group: NvnCloudDeployGroup
     region: us-east-1
+    on:
+      branch: assignment6
 
 notifications:
 email:

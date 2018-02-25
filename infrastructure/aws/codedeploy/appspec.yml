@@ -7,14 +7,14 @@ files:
 
 hooks:
   AfterInstall:
-   - location: ./afterInstall.sh
+   - location: ./codedeploy/afterInstall.sh
      timeout: 180
      runas: ubuntu
   ApplicationStart:
-   - location: ./applicationStart.sh
+   - location: ./codedeploy/applicationStart.sh
      timeout: 180
      runas: ubuntu
   ValidateService:
-   - location: ./validateService.sh
+   - location: ./codedeploy/validateService.sh
      timeout: 180
      runas: ubuntu

@@ -241,10 +241,6 @@
         "Type" : "AWS::CodeDeploy::DeploymentConfig",
           "Properties" : {
             "DeploymentConfigName" : "NvnCloudDeployConfig",
-            "DeploymentStyle": {
-              "DeploymentType": "IN_PLACE",
-              "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
-            },
             "MinimumHealthyHosts" : {
               "Type" : "HOST_COUNT",
               "Value" : 1
@@ -258,7 +254,11 @@
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
           "DeploymentConfigName" : {"Ref" :"CodeDeploymentConfig"},
           "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
-          "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
+          "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] },
+          "DeploymentStyle": {
+            "DeploymentType": "IN_PLACE",
+            "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
+          },
         }
       }
    },
