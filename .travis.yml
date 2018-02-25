@@ -19,9 +19,12 @@ after_success:
   - pwd
   - ls -al
   - mkdir codedeploy_artifact
-  - zip -r csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip app/target/huskycloud.war infrastructure/aws/codedeploy
+  - cp infrastructure/aws/codedeploy/*.sh .
+  - cp infrastructure/aws/codedeploy/*.yml .
+  - zip -r csye6225-web-app-$TRAVIS_JOB_NUMBER.zip app/target/huskycloud.war *.sh *.yml
   - ls -al
-  - mv csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
+  - mv csye6225-web-app-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
+  - ls -al
   - pwd
   - cd codedeploy_artifact
   - ls -al
@@ -49,6 +52,7 @@ deploy:
     application: nvn-codedeploy-app
     deployment_group: NvnCloudDeployGroup
     region: us-east-1
+    wait-until-deployed: true
     on:
       branch: assignment6
 
