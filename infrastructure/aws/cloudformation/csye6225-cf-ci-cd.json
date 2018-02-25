@@ -128,7 +128,7 @@
          }
       },
       "TravisCodeDeployPolicy":{
-         "Type":"AWS::IAM::ManagedPolicy",
+         "Type":"AWS::IAM::Policy",
          "Properties":{
             "ManagedPolicyName":"Travis-Code-Deploy-Policy",
             "PolicyDocument":{
