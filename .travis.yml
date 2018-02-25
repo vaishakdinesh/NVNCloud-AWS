@@ -19,9 +19,13 @@ after_success:
   - pwd
   - ls -al
   - mkdir codedeploy_artifact
-  - zip -r csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip app/target/huskycloud.war infrastructure/aws/codedeploy
+  - cp app/target/huskycloud.war infrastructure/aws/codedeploy
+  - cd infrastructure/aws/codedeploy
+  - pwd
   - ls -al
-  - mv csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
+  - zip -r csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip .
+  - ls -al
+  - mv csye6225-spring2018-$TRAVIS_JOB_NUMBER.zip ../../../codedeploy_artifact/
   - pwd
   - cd codedeploy_artifact
   - ls -al
