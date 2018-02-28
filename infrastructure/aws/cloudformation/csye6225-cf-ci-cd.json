@@ -128,9 +128,9 @@
          }
       },
       "TravisCodeDeployPolicy":{
-         "Type":"AWS::IAM::Policy",
+         "Type":"AWS::IAM::ManagedPolicy",
          "Properties":{
-            "PolicyName":"Travis-Code-Deploy-Policy",
+            "ManagedPolicyName":"Travis-Code-Deploy-Policy",
             "PolicyDocument":{
                "Version": "2012-10-17",
                "Statement":[
@@ -153,7 +153,10 @@
                                 {
                                   "Ref":"AWS::AccountId"
                                 },
-                                ":application:nvn-codedeploy-app"
+                                ":application:",
+                                {
+                                  "Ref":"CodeDeployApplication"
+                                }
                              ]
                           ]
                        }
@@ -166,8 +169,75 @@
                         "codedeploy:GetDeployment"
                      ],
                      "Resource":[
-                        "*"
-                     ]
+                       {
+                         "Fn::Join":[
+                            "",
+                            [
+                               "arn:aws:codedeploy:",
+                               {
+                                  "Ref":"AWS::Region"
+                               },
+                               ":",
+                               {
+                                 "Ref":"AWS::AccountId"
+                               },
+                               ":deploymentgroup:",
+                               {
+                                 "Ref": "CodeDeployApplication"
+                               },
+                               "/*"
+                            ]
+                         ]
+                       },
+                       {
+                        "Fn::Join":[
+                           "",
+                           [
+                              "arn:aws:codedeploy:",
+                              {
+                                 "Ref":"AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref":"AWS::AccountId"
+                              },
+                              ":deploymentconfig:CodeDeployDefault.OneAtATime"
+                           ]
+                        ]
+                     },
+                     {
+                        "Fn::Join":[
+                           "",
+                           [
+                              "arn:aws:codedeploy:",
+                              {
+                                 "Ref":"AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref":"AWS::AccountId"
+                              },
+                              ":deploymentconfig:CodeDeployDefault.HalfAtATime"
+                           ]
+                        ]
+                     },
+                     {
+                        "Fn::Join":[
+                           "",
+                           [
+                              "arn:aws:codedeploy:",
+                              {
+                                 "Ref":"AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref":"AWS::AccountId"
+                              },
+                              ":deploymentconfig:CodeDeployDefault.AllAtOnce"
+                           ]
+                        ]
+                     }
+                    ]
                   },
                   {
                      "Effect":"Allow",
@@ -237,28 +307,14 @@
           "ApplicationName": "nvn-codedeploy-app"
         }
       },
-      "CodeDeploymentConfig":{
-        "Type" : "AWS::CodeDeploy::DeploymentConfig",
-          "Properties" : {
-            "DeploymentConfigName" : "NvnCloudDeployConfig",
-            "MinimumHealthyHosts" : {
-              "Type" : "HOST_COUNT",
-              "Value" : 1
-            }
-          }
-      },
       "CodeDeploymentGroup":{
         "Type" : "AWS::CodeDeploy::DeploymentGroup",
         "Properties": {
           "DeploymentGroupName": "NvnCloudDeployGroup",
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
-          "DeploymentConfigName" : {"Ref" :"CodeDeploymentConfig"},
+          "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
           "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
-          "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] },
-          "DeploymentStyle": {
-            "DeploymentType": "IN_PLACE",
-            "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
-          },
+          "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }
       }
    },
