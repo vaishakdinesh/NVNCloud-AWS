@@ -59,6 +59,12 @@ public class UserProfileController {
 		userProfileService.updateUserProfilePicUrl(id, file);
 		return "redirect:/welcome";
 	}
+
+	@RequestMapping(value ="/profile/delete/picture/{id}", method = RequestMethod.GET)
+	public String uploadProfilePic(@PathVariable Integer id){
+		userProfileService.deleteUserProfilePic(id);
+		return "redirect:/welcome";
+	}
 	
 	/**
 	 * 
