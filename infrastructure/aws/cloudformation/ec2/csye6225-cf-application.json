@@ -155,7 +155,7 @@
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
                                   "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
-                                  "sudo echo \"export JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "sudo echo \"export JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   {
                   									"Fn::Join": [
                   										"", [
