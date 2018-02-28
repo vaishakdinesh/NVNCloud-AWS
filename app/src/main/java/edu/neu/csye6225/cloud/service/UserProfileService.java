@@ -34,6 +34,9 @@ public class UserProfileService implements IUserProfileService{
     @Value("${amazon.s3.url}")
 	private String s3Url;
 
+    @Value("${default.image}")
+    private String defaultPicUrl;
+
     @Autowired
 	private IAmazonS3Client amazonS3Client;
 
@@ -59,6 +62,15 @@ public class UserProfileService implements IUserProfileService{
         UserProfile userProfile = userRepository.findUserByUserId(id).getUserProfile();
         userProfile.setAboutMe(aboutMe);
         UserProfile savedUserProfile = userProfileRepository.save(userProfile);
+        return savedUserProfile;
+    }
+
+    @Override
+    public UserProfile deleteUserProfilePic(int id) {
+        User user = userRepository.findUserByUserId(id);
+        amazonS3Client.deleteFile(user.getEmail()+".jpg");
+        user.getUserProfile().setProfilePicUrl(defaultPicUrl);
+        UserProfile savedUserProfile = userProfileRepository.save(user.getUserProfile());
         return savedUserProfile;
     }
 
