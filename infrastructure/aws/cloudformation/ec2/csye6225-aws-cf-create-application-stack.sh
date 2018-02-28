@@ -4,6 +4,8 @@ stackstatus=""
 createStackStatus=""
 createFlag=true
 DomainName=$2
+AccessKeyId=$3
+SecretAccessKey=$4
 
 if [ -z "$StackName" ]; then
   echo "No stack name provided. Script exiting.."
@@ -37,7 +39,9 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=EbsVolumeType,ParameterValue=gp2 \
   ParameterKey=EbsVolumeSize,ParameterValue=16 \
   ParameterKey=KeyPairName,ParameterValue=keypair \
-  ParameterKey=bucketName,ParameterValue=$DomainName`
+  ParameterKey=bucketName,ParameterValue=$DomainName \
+  ParameterKey=AccessKeyId,ParameterValue=$AccessKeyId \
+  ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey`
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
