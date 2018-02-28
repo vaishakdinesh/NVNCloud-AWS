@@ -3,7 +3,8 @@ package edu.neu.csye6225.cloud.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
- 
+
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,7 @@ public class S3Client implements IAmazonS3Client{
             logger.info("Import File - Done!");
             
         } catch (AmazonServiceException ase) {
-        	logger.info("Caught an AmazonServiceException from GET requests, rejected reasons:");
-			logger.info("Error Message:    " + ase.getMessage());
-			logger.info("HTTP Status Code: " + ase.getStatusCode());
-			logger.info("AWS Error Code:   " + ase.getErrorCode());
-			logger.info("Error Type:       " + ase.getErrorType());
-			logger.info("Request ID:       " + ase.getRequestId());
+			logAwsException(ase);
         } catch (AmazonClientException ace) {
         	logger.info("Caught an AmazonClientException: ");
             logger.info("Error Message: " + ace.getMessage());
@@ -64,18 +60,36 @@ public class S3Client implements IAmazonS3Client{
 	        logger.info("Upload File - Done!");
 	        
 		} catch (AmazonServiceException ase) {
-			logger.info("Caught an AmazonServiceException from PUT requests, rejected reasons:");
-			logger.info("Error Message:    " + ase.getMessage());
-			logger.info("HTTP Status Code: " + ase.getStatusCode());
-			logger.info("AWS Error Code:   " + ase.getErrorCode());
-			logger.info("Error Type:       " + ase.getErrorType());
-			logger.info("Request ID:       " + ase.getRequestId());
+			logAwsException(ase);
         } catch (AmazonClientException ace) {
             logger.info("Caught an AmazonClientException: ");
             logger.info("Error Message: " + ace.getMessage());
         }catch (IOException ioe) {
         	logger.info("IOE Error Message: " + ioe.getMessage());
 		}
+	}
+
+	@Override
+	public void deleteFile(String keyName) {
+		try {
+			s3client.deleteObject(new DeleteObjectRequest(bucketName,keyName));
+			logger.info("Delete File - Done!");
+
+		} catch (AmazonServiceException ase) {
+			logAwsException(ase);
+		}catch (AmazonClientException ace) {
+			logger.info("Caught an AmazonClientException: ");
+			logger.info("Error Message: " + ace.getMessage());
+		}
+	}
+
+	private void logAwsException(AmazonServiceException ase){
+		logger.info("Caught an AmazonServiceException from PUT requests, rejected reasons:");
+		logger.info("Error Message:    " + ase.getMessage());
+		logger.info("HTTP Status Code: " + ase.getStatusCode());
+		logger.info("AWS Error Code:   " + ase.getErrorCode());
+		logger.info("Error Type:       " + ase.getErrorType());
+		logger.info("Request ID:       " + ase.getRequestId());
 	}
 
 }

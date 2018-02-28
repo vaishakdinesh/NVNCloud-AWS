@@ -5,7 +5,8 @@ app.controller('homeCtlr', ['$scope', function($scope){
 }]);
 
 app.controller('profileCtlr', ['$scope','getLoggedInUser',
-    'updateAboutMe','fileUpload',function($scope,getLoggedInUser,updateAboutMe,fileUpload){
+    'updateAboutMe','fileUpload', 'fileDelete',
+    function($scope,getLoggedInUser,updateAboutMe,fileUpload,fileDelete){
         $scope.user = null;
         getLoggedInUser.getUser(function(data){
             $scope.user=data;
@@ -66,6 +67,11 @@ app.controller('profileCtlr', ['$scope','getLoggedInUser',
                 location.reload();
             }
         };
+
+        $scope.deleteFile = function(){
+            fileDelete.deletePic($scope.user.userId);
+            location.reload();
+        }
 
     }]);
 
@@ -177,4 +183,19 @@ app.directive('customOnChange', function() {
         }
     };
 });
+
+app.service('fileDelete', ['$http', function ($http) {
+    $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8";
+
+    this.deletePic = function(id) {
+        $http({
+            url : '/profile/delete/picture/'+id,
+            method : 'GET',
+        }).then(function(response){
+            return response.data;
+        }, function(reason){
+
+        });
+    };
+}]);
 
