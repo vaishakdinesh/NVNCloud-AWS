@@ -154,12 +154,12 @@
                                   "sudo ./install auto \n",
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
-                                  "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+                                  "sudo echo \"export JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
                                   "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
                   								{
                   									"Fn::Join": [
                   										"", [
-                  											"echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
+                  											"echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
                   											{
                   												"Fn::GetAtt": [
                   													"NVNCloudRDSDB",
@@ -170,35 +170,35 @@
                   											{
                   												"Ref": "DBName"
                   											},
-                  											"\"\"'>> /etc/default/tomcat8"
+                  											"\"\"'>> /usr/share/tomcat8/bin/setenv.sh \n"
                   										]
                   									]
                   								},
-                  								"echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=\"",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=\"",
                   								{
                   									"Ref": "DBUser"
                   								},
-                  								"\"\"' >> /etc/default/tomcat8",
-                  								"echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=\"",
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=\"",
                   								{
                   									"Ref": "DBPassword"
                   								},
-                  								"\"\"' >> /etc/default/tomcat8",
-                  								"echo 'JAVA_OPTS=\"$JAVA_OPTS -Damazon.s3.default-bucket=\"",
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.s3.default-bucket=\"",
                   								{
                   									"Ref": "bucketName"
                   								},
-                                  "\"\"' >> /etc/default/tomcat8",
-                                  "echo 'JAVA_OPTS=\"$JAVA_OPTS -Daws.access-key-id=\"",
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-key-id=\"",
                   								{
                   									"Ref": "AccessKeyId"
                   								},
-                  								"\"\"' >> /etc/default/tomcat8",
-                  								"echo 'JAVA_OPTS=\"$JAVA_OPTS -Daws.access-secret-key=\"",
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-secret-key=\"",
                   								{
                   									"Ref": "SecretAccessKey"
                   								},
-                                  "\"\"' >> /etc/default/tomcat8",
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
 								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo service tomcat8 restart \n"
                               ]
