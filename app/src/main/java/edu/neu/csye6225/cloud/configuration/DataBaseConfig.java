@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableAutoConfiguration
 @EnableTransactionManagement
 public class DataBaseConfig {
     @Value("${spring.datasource.driver-class-name}")
@@ -37,8 +36,7 @@ public class DataBaseConfig {
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String HIBERNATE_HBM2DDL_AUTO;
 
-    @Value("${entitymanager.packagesToScan}")
-    private String ENTITYMANAGER_PACKAGES_TO_SCAN;
+    private String ENTITYMANAGER_PACKAGES_TO_SCAN="edu.neu.csye6225.cloud";
 
     @Bean
     public DataSource dataSource() {

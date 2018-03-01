@@ -10,8 +10,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class AmazonS3Config {
 
 	private final String awsId;
