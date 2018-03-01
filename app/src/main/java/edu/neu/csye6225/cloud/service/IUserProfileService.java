@@ -7,5 +7,6 @@ public interface IUserProfileService {
     UserProfile findUserProfileByEmail(String userEmail);
     UserProfile updateUserProfilePicUrl(int id, MultipartFile file);
     UserProfile updateUserProfileAboutMe(int id, String aboutMe);
+    UserProfile deleteUserProfilePic(int id);
     UserProfile findUserProfileById(int userProfileId);
 }

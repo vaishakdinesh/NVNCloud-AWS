@@ -16,7 +16,6 @@
   			"Description": "Database Password",
   			"Type": "String"
   		},
-
   		"bucketName": {
   			"Description": "Bucket name",
   			"Type": "String"
@@ -41,7 +40,6 @@
         "Description": "DBInstanceIdentifier",
   			"Type": "String"
       },
-
       "EC2ImageId":{
         "Description": "EC2 ImageId",
   			"Type": "String"
@@ -61,12 +59,28 @@
       "EbsVolumeSize" : {
         "Description": "Ebs VolumeSize",
   			"Type": "Number"
+      },
+      "KeyPairName" : {
+        "Description": "Key Pair Name",
+  			"Type": "String"
+      },
+      "AccessKeyId": {
+			"Description": "Access key",
+			"Type": "String"
+  		},
+  		"SecretAccessKey": {
+  		"Description": "Secret key",
+  		"Type": "String"
+      },
+      "MySqlClientPass":{
+        "Description": "Root password for MySQL client on EC2 Instance",
+        "Type": "String"
       }
     },
 
 
   "Resources" : {
-    "myDynamoDBTable": {
+    "NVNDynamoDBTable": {
   		      "Type": "AWS::DynamoDB::Table",
   		      "Properties": {
   			"AttributeDefinitions": [
@@ -88,14 +102,34 @@
   			"TableName": "csye6225"
   		      }
 		    },
-    "myS3Bucket": {
+    "NVNCloudS3Bucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
               "BucketName": { "Ref": "bucketName" }
             }
-        },
-
-        "MyDB": {
+      },
+      "NVNCloudS3BucketPolicy":{
+        "Type" : "AWS::S3::BucketPolicy",
+        "Properties" : {
+          "Bucket" : {"Ref": "NVNCloudS3Bucket"},
+          "PolicyDocument": {
+            "Statement": [{
+              "Action":["s3:GetObject"],
+        	    "Effect":"Allow",
+        	    "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "bucketName" } , "/*" ]]},
+        	    "Principal":"*",
+              "Condition":{
+                "StringLike":{
+                  "aws:Referer":[
+                    "*"
+                  ]
+                }
+              }
+              }]
+          }
+        }
+      },
+        "NVNCloudRDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
               "Engine": { "Ref": "DBEngine"},
@@ -111,15 +145,109 @@
               "VPCSecurityGroups": [{ "Fn::ImportValue" : "RDSGroupName" }],
               "DBSubnetGroupName": { "Fn::ImportValue" : "DBSubnetGroupName" }
             },
-            "DeletionPolicy": "Snapshot"
+            "DeletionPolicy": "Delete"
           },
 
     "EC2Instance": {
     			"Type": "AWS::EC2::Instance",
     			"Properties": {
     				"ImageId": { "Ref": "EC2ImageId" },
+            "KeyName" : { "Ref": "KeyPairName" },
+            "IamInstanceProfile" :{"Fn::ImportValue" : "EC2InstanceProfile"},
     				"InstanceType": { "Ref": "EC2InstanceType" },
+            "SecurityGroupIds" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
             "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
+            "Tags":[{
+              "Key": "Name",
+              "Value": "NVNCloudEC2"
+              }],
+            "UserData": {
+                      "Fn::Base64": {
+                          "Fn::Join": [
+                              "",
+                              [
+                                  "#!/bin/bash -xe \n",
+                                  "sudo apt-get update \n",
+                                  "sudo apt-get install openjdk-8-jdk -y\n",
+                                  "sudo apt-get install ruby -y \n",
+                                  "sudo apt-get install wget -y \n",
+                                  "sudo apt-get install python -y \n",
+                                  "sudo apt-get update \n",
+                                  "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
+                                  "sudo chmod +x ./install \n",
+                                  "sudo ./install auto \n",
+                                  "sudo service codedeploy-agent start \n",
+                                  "sudo apt-get install tomcat8 -y \n",
+                                  "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "sudo echo \"export JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  {
+                  									"Fn::Join": [
+                  										"", [
+                  											"echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
+                  											{
+                  												"Fn::GetAtt": [
+                  													"NVNCloudRDSDB",
+                  													"Endpoint.Address"
+                  												]
+                  											},
+                  											":3306/",
+                  											{
+                  												"Ref": "DBName"
+                  											},
+                  											"\"\"'>> /usr/share/tomcat8/bin/setenv.sh \n"
+                  										]
+                  									]
+                  								},
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=\"",
+                  								{
+                  									"Ref": "DBUser"
+                  								},
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=\"",
+                  								{
+                  									"Ref": "DBPassword"
+                  								},
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.s3.default-bucket=\"",
+                  								{
+                  									"Ref": "bucketName"
+                  								},
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-key-id=\"",
+                  								{
+                  									"Ref": "AccessKeyId"
+                  								},
+                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-secret-key=\"",
+                  								{
+                  									"Ref": "SecretAccessKey"
+                  								},
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "sudo service tomcat8 restart \n",
+                                  {
+                                    "Fn::Join":[
+                                      "",[
+                                        "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ",
+                                        {"Ref": "MySqlClientPass"},
+                                        "'\" \n"
+                                      ]
+                                    ]
+                                  },
+                                  {
+                                    "Fn::Join":[
+                                      "",[
+                                        "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ",
+                                        {"Ref": "MySqlClientPass"},
+                                        "'\" \n"
+                                      ]
+                                    ]
+                                  },
+                                  "sudo apt-get -y install mysql-server \n"
+                              ]
+                          ]
+                      }
+                  },
             "BlockDeviceMappings": [
                  {
                      "DeviceName" : { "Ref": "EbsDeviceName"},
@@ -131,6 +259,19 @@
                  }
              ]
           }
-          }
-}
+        }
+      },
+
+      "Outputs": {
+        "WebAppS3BucketName": {
+          "Description": "Web Application S3 Bucket Name",
+          "Value": { "Ref": "NVNCloudS3Bucket"},
+          "Export" : { "Name" : "WebAppS3BucketName" }
+        },
+        "EC2Instance": {
+          "Description": "EC2 Instance",
+          "Value": { "Ref": "EC2Instance"},
+          "Export" : { "Name" : "EC2Instance" }
+        }
+      }
 }
