@@ -144,3 +144,15 @@
 	.reveal{
 		display:block;
 	}
+
+	/* The delete button */
+	.trashcan{
+		position: absolute;
+		color: red;
+		top:87px;
+		right: 93px;
+		font-size: 30px;
+	}
+	.trashcan:hover{
+		cursor: pointer;
+	}

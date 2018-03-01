@@ -48,7 +48,7 @@ public class UserService implements IUserService {
         newUser.setToken(issueUniqueToken());
         newUser.setActive(false);
         UserProfile up = new UserProfile();
-        up.setProfilePicUrl(env.getProperty("s3bucket.default.picture.url"));
+        up.setProfilePicUrl(env.getProperty("default.image"));
         newUser.setUserProfile(up);
         User user = userRepository.save(newUser);
         return user;

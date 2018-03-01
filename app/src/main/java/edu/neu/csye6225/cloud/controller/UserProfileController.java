@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.csye6225.cloud.modal.User;
 import edu.neu.csye6225.cloud.modal.UserProfile;
+import edu.neu.csye6225.cloud.service.IAmazonS3Client;
 import edu.neu.csye6225.cloud.service.IUserProfileService;
 import edu.neu.csye6225.cloud.service.IUserService;
 import edu.neu.csye6225.cloud.service.UserService;
@@ -56,6 +57,12 @@ public class UserProfileController {
 	@RequestMapping(value ="/profile/update/picture/{id}", method = RequestMethod.POST)
 	public String uploadProfilePic(@PathVariable Integer id, @RequestParam MultipartFile file){
 		userProfileService.updateUserProfilePicUrl(id, file);
+		return "redirect:/welcome";
+	}
+
+	@RequestMapping(value ="/profile/delete/picture/{id}", method = RequestMethod.GET)
+	public String uploadProfilePic(@PathVariable Integer id){
+		userProfileService.deleteUserProfilePic(id);
 		return "redirect:/welcome";
 	}
 	
