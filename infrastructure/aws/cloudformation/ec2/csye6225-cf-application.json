@@ -71,7 +71,11 @@
   		"SecretAccessKey": {
   		"Description": "Secret key",
   		"Type": "String"
-  		}
+      },
+      "MySqlClientPass":{
+        "Description": "Root password for MySQL client on EC2 Instance",
+        "Type": "String"
+      }
     },
 
 
@@ -155,7 +159,7 @@
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
                                   "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
-                                  "sudo echo \"export JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "sudo echo \"export JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   {
                   									"Fn::Join": [
                   										"", [
@@ -200,7 +204,26 @@
                   								},
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
 								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
-                                  "sudo service tomcat8 restart \n"
+                                  "sudo service tomcat8 restart \n",
+                                  {
+                                    "Fn::Join":[
+                                      "",[
+                                        "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ",
+                                        {"Ref": "MySqlClientPass"},
+                                        "'\" \n"
+                                      ]
+                                    ]
+                                  },
+                                  {
+                                    "Fn::Join":[
+                                      "",[
+                                        "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ",
+                                        {"Ref": "MySqlClientPass"},
+                                        "'\" \n"
+                                      ]
+                                    ]
+                                  },
+                                  "sudo apt-get -y install mysql-server \n"
                               ]
                           ]
                       }

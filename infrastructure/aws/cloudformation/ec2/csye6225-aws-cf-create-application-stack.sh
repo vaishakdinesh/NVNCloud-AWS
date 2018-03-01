@@ -6,6 +6,7 @@ createFlag=true
 DomainName=$2
 AccessKeyId=$3
 SecretAccessKey=$4
+MySqlClientPass=$5
 
 if [ -z "$StackName" ]; then
   echo "No stack name provided. Script exiting.."
@@ -41,7 +42,8 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=KeyPairName,ParameterValue=keypair \
   ParameterKey=bucketName,ParameterValue=$DomainName \
   ParameterKey=AccessKeyId,ParameterValue=$AccessKeyId \
-  ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey`
+  ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey \
+  ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass`
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
