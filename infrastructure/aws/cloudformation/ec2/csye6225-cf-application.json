@@ -225,10 +225,10 @@
                                   },
                                   "sudo apt-get -y install mysql-server \n",
                                   "cd /var/lib/tomcat8/webapps \n",
-                                  "sudo rm -r ROOT \n"
+                                  "sudo rm -r ROOT \n",
                                   "cd /var/lib \n",
-                                  "sudo chown tomcat8:tomcat8 tomcat8/ \n",
-                                  "sudo chmod u+wrx tomcat8/ \n"
+                                  "sudo chown tomcat8:tomcat8 tomcat8 \n",
+                                  "sudo chmod u+wrx tomcat8 \n"
                               ]
                           ]
                       }
