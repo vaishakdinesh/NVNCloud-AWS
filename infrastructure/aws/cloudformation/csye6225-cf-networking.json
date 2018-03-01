@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "csye6225 cloud formation template",
+  "Description" : "csye6225 cloudformation network stack",
 
 "Mappings" : {
     "RegionMap" : {
@@ -13,6 +13,7 @@
             "Properties":{
               "CidrBlock": "10.0.0.0/16",
               "EnableDnsSupport":true,
+              "EnableDnsHostnames" : true,
               "InstanceTenancy": "default",
                   "Tags": [{"Key": "Name","Value": {"Fn::Join":["",[{"Ref":"AWS::StackName"},"-csye6225-vpc"]]}
                       }]
@@ -138,13 +139,19 @@
                   "IpProtocol" : "tcp",
                   "FromPort" : "22",
                   "ToPort" : "22",
-                  "CidrIp" : "0.0.0.0/0"
+                  "CidrIp" :  "0.0.0.0/0"
                 },
                 {
                     "IpProtocol" : "tcp",
                     "FromPort" : "80",
                     "ToPort" : "80",
                     "CidrIp" : "0.0.0.0/0"
+               },
+               {
+                   "IpProtocol" : "tcp",
+                   "FromPort" : "8080",
+                   "ToPort" : "8080",
+                   "CidrIp" : "0.0.0.0/0"
                },
                {
                    "IpProtocol" : "tcp",
@@ -173,7 +180,7 @@
     },
     "Outputs": {
       "GroupName": {
-        "Description": "Name of NVNCloudRDSSecurityGroup",
+        "Description": "ID of NVNCloudRDSSecurityGroup",
         "Value": { "Ref": "NVNCloudRDSSecurityGroup"},
         "Export" : { "Name" : "RDSGroupName" }
       },
@@ -181,6 +188,11 @@
         "Description": "Name of DBSubnetGroup",
         "Value": { "Ref": "NVNDBSubnetGroup"},
         "Export" : { "Name" : "DBSubnetGroupName" }
+      },
+      "NVNCloudSecurityGroupName": {
+        "Description": "ID of NVNCloudSecurityGroup",
+        "Value": { "Ref": "NVNCloudSecurityGroup"},
+        "Export" : { "Name" : "EC2GroupName" }
       },
       "PublicSubnet":{
         "Description": "Public subnet for EC2",
