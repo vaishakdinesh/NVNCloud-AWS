@@ -12,7 +12,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
 public class AmazonS3Config {
 
 	private final String awsId;
@@ -27,18 +27,13 @@ public class AmazonS3Config {
 		this.awsKey = awsKey;
 		this.s3Region = s3Region;
 	}
- 
-
 	
-
-
- 
 	@Bean
 	public AmazonS3 s3client() {
 		
 		BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsId, awsKey);
 		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-								.withRegion(Regions.fromName(s3Region))
+								.withRegion(Regions.US_EAST_1)
 		                        .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
 		                        .build();
 		
