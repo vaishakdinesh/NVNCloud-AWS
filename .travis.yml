@@ -10,7 +10,8 @@ install: true
 script:
   - pwd
   - cd app
-  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=dev -B -V
+  - export JAVA_OPTS=${JAVA_OPTS} -Dspring.datasource.username=root -Dspring.datasource.password='""'
+  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -B -V
   - cd target
   - ls -al
   - cd ../../
