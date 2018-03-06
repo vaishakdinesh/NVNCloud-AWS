@@ -10,7 +10,7 @@ install: true
 script:
   - pwd
   - cd app
-  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=dev -Dspring.datasource.url=jdbc:mysql://localhost:3306/csyecloud?verifyServerCertificate=false&useSSL=false -Dspring.datasource.username=root -Dspring.datasource.password="" -Damazon.s3.default-bucket=web-app.dineshv.me -Daws.access-key-id=AKIAI5JPHX7QVMJAXYIA -Daws.access-secret-key=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 -B -V
+  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=dev -Dspring.datasource.url=jdbc:mysql://localhost:3306/csyecloud?verifyServerCertificate=false&useSSL=false -Dspring.datasource.username=root -Dspring.datasource.password='""' -Damazon.s3.default-bucket=web-app.dineshv.me -Daws.access-key-id=AKIAI5JPHX7QVMJAXYIA -Daws.access-secret-key=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 -B -V
   - cd target
   - ls -al
   - cd ../../
