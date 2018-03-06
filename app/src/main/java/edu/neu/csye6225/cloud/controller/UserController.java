@@ -64,7 +64,7 @@ public class UserController {
                            request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort());
                    return "User registration successful. Please activate your account by using activation link sent to your email.";
                } else {
-                   return "Unable to register now. Try again later.";
+                   return "Unable to save the user. Try again later.";
                }
            } else{
                return "Invalid Email format.";
