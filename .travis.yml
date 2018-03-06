@@ -7,11 +7,13 @@ services:
 sudo: false
 install: true
 
+before_install:
+  - mysql -e 'CREATE DATABASE csyecloud;'
+
 script:
   - pwd
   - cd app
-  - export JAVA_OPTS=${JAVA_OPTS} -Dspring.datasource.username=root -Dspring.datasource.password='""'
-  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -B -V
+  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -Dspring.datasource.username=root -Dspring.datasource.password='""' -B -V
   - cd target
   - ls -al
   - cd ../../
