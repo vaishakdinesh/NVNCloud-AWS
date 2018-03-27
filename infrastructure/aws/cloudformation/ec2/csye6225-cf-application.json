@@ -259,6 +259,13 @@
                  }
              ]
           }
+        },
+        "SNSPasswordResetTopic":{
+          "Type" : "AWS::SNS::Topic",
+          "Properties" : {
+            "DisplayName" : "forgotPassword",
+            "TopicName" : "forgotPassword"
+          }
         }
       },
 
@@ -272,6 +279,11 @@
           "Description": "EC2 Instance",
           "Value": { "Ref": "EC2Instance"},
           "Export" : { "Name" : "EC2Instance" }
+        },
+        "SNSTopicARN": {
+          "Description": "SNS Topic Arn",
+          "Value": { "Ref": "SNSPasswordResetTopic"},
+          "Export" : { "Name" : "SNSTopicARN" }
         }
       }
 }
