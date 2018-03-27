@@ -12,4 +12,5 @@ public interface IUserService {
     User saveUser(String fname, String lname, String useremail, String password);
     boolean activateUser(String token);
     boolean activateUserJmeter(String email);
+    void notifySNS(String email);
 }

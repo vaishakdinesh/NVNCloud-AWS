@@ -6,12 +6,16 @@
 var app = angular.module('loginApp', []);
 
 
-app.controller('loginCtlr', ['$scope','userEmailCheck', 'registerUser', 'loginUser' , function($scope, userEmailCheck, registerUser, loginUser) {
+app.controller('loginCtlr', ['$scope','userEmailCheck', 'registerUser', 'loginUser' , 'forgot' , function($scope, userEmailCheck, registerUser, loginUser, forgot) {
 
     /* Method to clear success message for player */
     $scope.clearSuccessMsg = function(){
         $scope.newUserMessage = "";
     };
+    
+    $scope.forgetPage = function(){
+    	forgot.getForgotPasswordPage();
+    }
 
 
     /* Method to check user email */
@@ -115,6 +119,21 @@ app.service('userEmailCheck', [ '$http', function($http) {
             cb(response.data);
         }, function(failure) {
             cb("Unable to validate user email now. Try later.");
+        });
+    };
+
+} ]);
+
+/* service to check duplicate user email */
+app.service('forgot', [ '$http', function($http) {
+
+    this.getForgotPasswordPage = function() {
+       $http({
+            url : 'resetpassword',
+            method : 'GET',
+        }).then(function() {
+        	window.location = "/resetpassword";
+        }, function() {
         });
     };
 

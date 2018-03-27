@@ -1,14 +1,19 @@
 language: java
 jdk:
 - openjdk8
+services:
+  - mysql
 
 sudo: false
 install: true
 
+before_install:
+  - mysql -e 'CREATE DATABASE csyecloud;'
+
 script:
   - pwd
   - cd app
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -Dspring.datasource.username=travis -Dspring.datasource.password=$travis_db_password -B -V
   - cd target
   - ls -al
   - cd ../../
