@@ -56,21 +56,51 @@ app.controller('profileCtlr', ['$scope','getLoggedInUser',
         $("#caption").click(function () {
             $("#uploadfile").click();
         });
-
+        
+        $scope.safeApply = function(fn) {
+        	  var phase = this.$root.$$phase;
+        	  if(phase == '$apply' || phase == '$digest') {
+        	    if(fn && (typeof(fn) === 'function')) {
+        	      fn();
+        	    }
+        	  } else {
+        	    this.$apply(fn);
+        	  }
+        };
+        
         $scope.uploadFile = function(){
             if($scope.user != null && $scope.user != "null" && $scope.user != 'undefined'){
                 var file = $scope.myFile;
                 console.log('file is ' );
                 console.dir(file);
                 var uploadUrl = "/profile/update/picture/"+$scope.user.userId;
-                fileUpload.uploadFileToUrl(file, uploadUrl);
-                location.reload();
+                fileUpload.uploadFileToUrl(file, uploadUrl,function(res){
+                	$scope.safeApply(function(){
+                		$scope.user.userProfile.profilePicUrl=res.data.profilePicUrl;
+                	});
+                	$.unblockUI();
+                	$(".closeWindow").click();
+                	//location.reload();
+                });
+                $scope.block();
             }
         };
 
         $scope.deleteFile = function(){
             fileDelete.deletePic($scope.user.userId);
             location.reload();
+        }
+        
+        $scope.block = function(){
+        	    $.blockUI({ css: { 
+                    border: 'none', 
+                    padding: '15px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .5, 
+                    color: '#fff' 
+                } }); 
         }
 
     }]);
@@ -155,7 +185,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
 
 /* Service to upload profile pics */
 app.service('fileUpload', ['$http', function ($http) {
-    this.uploadFileToUrl = function(file, uploadUrl){
+    this.uploadFileToUrl = function(file, uploadUrl,cb){
         var fd = new FormData();
         fd.append('file', file);
         $http({
@@ -168,7 +198,8 @@ app.service('fileUpload', ['$http', function ($http) {
             data:fd,
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
-        }).then(function(){
+        }).then(function(data){
+        	cb(data);
         },function(){
         });
     }
