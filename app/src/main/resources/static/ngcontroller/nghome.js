@@ -78,9 +78,10 @@ app.controller('profileCtlr', ['$scope','getLoggedInUser',
                 	$scope.safeApply(function(){
                 		$scope.user.userProfile.profilePicUrl=res.data.profilePicUrl;
                 	});
+                	
                 	$.unblockUI();
                 	$(".closeWindow").click();
-                	//location.reload();
+                	location.reload();
                 });
                 $scope.block();
             }

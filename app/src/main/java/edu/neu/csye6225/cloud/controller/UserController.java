@@ -76,6 +76,13 @@ public class UserController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = "text/plain")
+    public String sendResetLink(@RequestParam String useremail){
+    	iUserService.notifySNS(useremail);
+    	return "{message: An email has been sent with a reset link which will be valid for 20 min.";
+    }
+    
+    @ResponseBody
     @RequestMapping(value = "/registration-confirmation", method = RequestMethod.GET, produces = "text/plain")
     public String activateUser(@RequestParam String token){
         if(!token.isEmpty()){
