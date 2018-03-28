@@ -2,8 +2,9 @@ var app = angular.module('forgotApp', []);
 
 app.controller('forgotCtlr', ['$scope', 'resetLink',function($scope,resetLink) {
 	$scope.resetLink = function(){
-		resetLink.resetPassword($scope.useremail,function(){
+		resetLink.resetPassword($scope.useremail,function(message){
 			 $scope.useremail = "";
+			 $scope.newUserMessage = message.data;
 	         $scope.resetform.$setPristine();
 	         $scope.resetform.$setUntouched();
 		});
@@ -22,7 +23,7 @@ app.service('resetLink', [ '$http', '$location', function($http, $location) {
             method : 'POST',
             data : data
         }).then(function(response) {
-        	cb();
+        	cb(response);
         }, function(reason){
             cb(false);
         });
