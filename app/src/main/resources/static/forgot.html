@@ -11,6 +11,11 @@
     <script type="text/javascript" src="js/angular/angular.min.js"></script>
     <script type="text/javascript" src="ngcontroller/ngforgot.js"></script>
     <script type="text/javascript" src="js/scroll-spy.js"></script>
+    <style>
+    	.msg{
+    		color:green;
+    	}
+    </style>
 </head>
 <body>
 <div ng-app="forgotApp" ng-controller="forgotCtlr">
@@ -63,6 +68,8 @@
                                    placeholder="User Email" ng-model="useremail" required />
                             <button type="submit" ng-disabled="logform.$invalid"
                                     class="btn btn-default btn-block btn-custom">Send Reset Link</button>
+                                    <span class="msg">{{
+										newUserMessage }}</span>
                             <!--<sec:csrfInput/>-->
                         </form>
                     </div>
