@@ -223,6 +223,11 @@
                   									"Ref": "SecretAccessKey"
                   								},
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.sns.topic=\"",
+                  								{
+                  									"Ref": "SNSPasswordResetTopic"
+                  								},
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
 								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo service tomcat8 restart \n",
                                   {
