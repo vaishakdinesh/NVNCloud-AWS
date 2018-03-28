@@ -54,10 +54,11 @@ public class UserProfileController {
 		userProfileService.updateUserProfileAboutMe(id, about);
 	}
 	
+	@ResponseBody
 	@RequestMapping(value ="/profile/update/picture/{id}", method = RequestMethod.POST)
-	public String uploadProfilePic(@PathVariable Integer id, @RequestParam MultipartFile file){
-		userProfileService.updateUserProfilePicUrl(id, file);
-		return "redirect:/welcome";
+	public UserProfile uploadProfilePic(@PathVariable Integer id, @RequestParam MultipartFile file){
+		UserProfile userProfile=userProfileService.updateUserProfilePicUrl(id, file);
+		return userProfile;
 	}
 
 	@RequestMapping(value ="/profile/delete/picture/{id}", method = RequestMethod.GET)

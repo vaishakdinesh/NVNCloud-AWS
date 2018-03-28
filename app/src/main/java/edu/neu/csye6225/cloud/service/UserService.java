@@ -4,16 +4,29 @@ import edu.neu.csye6225.cloud.enums.Role;
 import edu.neu.csye6225.cloud.modal.User;
 import edu.neu.csye6225.cloud.modal.UserProfile;
 import edu.neu.csye6225.cloud.repository.UserRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
-
+	
+	private Logger logger = LoggerFactory.getLogger(UserService.class);
+	
     @Autowired
     private UserRepository userRepository;
 
@@ -23,6 +36,11 @@ public class UserService implements IUserService {
     @Autowired
     private Environment env;
     
+    @Autowired
+    private AmazonSNS snsClient;
+
+    @Value("${amazon.sns.topic}")
+    private String snsTopicArn;
     
 
     @Override
@@ -89,4 +107,12 @@ public class UserService implements IUserService {
         String token = UUID.randomUUID().toString();
         return token;
     }
+
+	@Override
+	public void notifySNS(String email) {
+		PublishRequest publishRequest = new PublishRequest(snsTopicArn, email);
+		PublishResult publishResult = snsClient.publish(publishRequest);
+		//print MessageId of message published to SNS topic
+		logger.info("MessageId - " + publishResult.getMessageId());
+	}
 }

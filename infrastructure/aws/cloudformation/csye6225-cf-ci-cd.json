@@ -316,7 +316,55 @@
           "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
           "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }
+      },
+      "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns":[
+           "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "AssumeRolePolicyDocument":{
+           "Statement":[
+              {
+                 "Effect":"Allow",
+                 "Principal":{
+                    "Service":[
+                       "lambda.amazonaws.com"
+                    ]
+                 },
+                 "Action":[
+                    "sts:AssumeRole"
+                 ]
+              }
+           ]
+        },
+        "Path": "/"
       }
+    },
+    "CloudWatchPolicy":{
+       "Type":"AWS::IAM::Policy",
+       "Properties":{
+          "PolicyName":"Cloud-Watch-Policy",
+          "PolicyDocument":{
+             "Version": "2012-10-17",
+             "Statement":[
+                {
+                   "Effect":"Allow",
+                   "Resource": [
+                        "arn:aws:logs:*:*:*"
+                    ],
+                   "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents",
+                        "logs:DescribeLogStreams"
+                    ]
+                }
+             ]
+          },
+          "Users":["NVNHuskyCloud"]
+       }
+    }
    },
    "Outputs": {
      "EC2InstanceProfile": {

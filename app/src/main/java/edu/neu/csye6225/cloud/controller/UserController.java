@@ -64,7 +64,7 @@ public class UserController {
                            request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort());
                    return "User registration successful. Please activate your account by using activation link sent to your email.";
                } else {
-                   return "Unable to register now. Try again later.";
+                   return "Unable to save the user. Try again later.";
                }
            } else{
                return "Invalid Email format.";
@@ -75,6 +75,13 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = "text/plain")
+    public String sendResetLink(@RequestParam String useremail){
+    	iUserService.notifySNS(useremail);
+    	return "{message: An email has been sent with a reset link which will be valid for 20 min.";
+    }
+    
     @ResponseBody
     @RequestMapping(value = "/registration-confirmation", method = RequestMethod.GET, produces = "text/plain")
     public String activateUser(@RequestParam String token){
