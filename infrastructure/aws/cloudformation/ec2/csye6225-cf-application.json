@@ -380,6 +380,19 @@
                   "RetentionInDays": 7
               }
           },
+        "EC2ElasticIP" : {
+          "Type" : "AWS::EC2::EIP",
+          "Properties" : {
+            "Domain" : "vpc"
+          }
+        },
+        "EIPAssociation" : {
+          "Type" : "AWS::EC2::EIPAssociation",
+          "Properties" : {
+            "AllocationId" : { "Fn::GetAtt" : [ "EC2ElasticIP", "AllocationId" ]},
+            "InstanceId": {"Ref": "EC2Instance"}
+          }
+        },
         "SNSPasswordResetTopic":{
           "Type" : "AWS::SNS::Topic",
           "Properties" : {
