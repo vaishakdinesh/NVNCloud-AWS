@@ -316,7 +316,88 @@
           "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
           "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }
+      },
+      "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties":{
+           "AssumeRolePolicyDocument":{
+           "Statement":[
+             {
+                 "Effect": "Allow",
+                 "Principal":{
+                    "Service":[
+                       "lambda.amazonaws.com"
+                    ]
+                 },
+                 "Action": [
+                    "sts:AssumeRole"
+                 ]
+             }
+           ]
+      },
+      "Path":"/"
       }
+      },
+      "NVNlambdaPolicy":{
+         "Type":"AWS::IAM::Policy",
+         "Properties":{
+            "PolicyName":"NVNlambda-Policy",
+            "PolicyDocument":{
+               "Version": "2012-10-17",
+               "Statement":[
+                  {
+                     "Effect":"Allow",
+                     "Resource": "*",
+                     "Action": [
+                     "logs:CreateLogGroup",
+                     "logs:CreateLogStream",
+                     "logs:PutLogEvents",
+                     "ses:SendEmail",
+                     "dynamodb:CreateTable",
+                     "dynamodb:UpdateTimeToLive",
+                     "dynamodb:PutItem",
+                     "dynamodb:DeleteItem",
+                     "dynamodb:GetItem",
+                     "dynamodb:Scan",
+                     "dynamodb:Query",
+                     "dynamodb:UpdateItem",
+                     "dynamodb:UpdateTable",
+                     "dynamodb:GetRecords"
+                      ]
+                  }
+               ]
+            },
+            "Roles":[
+               {
+                  "Ref":"LambdaExecutionRole"
+               }
+            ]
+         }
+      },
+    "CloudWatchPolicy":{
+       "Type":"AWS::IAM::Policy",
+       "Properties":{
+          "PolicyName":"Cloud-Watch-Policy",
+          "PolicyDocument":{
+             "Version": "2012-10-17",
+             "Statement":[
+                {
+                   "Effect":"Allow",
+                   "Resource": [
+                        "arn:aws:logs:*:*:*"
+                    ],
+                   "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents",
+                        "logs:DescribeLogStreams"
+                    ]
+                }
+             ]
+          },
+          "Users":["NVNHuskyCloud"]
+       }
+    }
    },
    "Outputs": {
      "EC2InstanceProfile": {

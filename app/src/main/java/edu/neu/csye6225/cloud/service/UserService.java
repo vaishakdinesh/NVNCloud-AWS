@@ -8,6 +8,7 @@ import edu.neu.csye6225.cloud.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +39,9 @@ public class UserService implements IUserService {
     
     @Autowired
     private AmazonSNS snsClient;
+
+    @Value("${amazon.sns.topic}")
+    private String snsTopicArn;
     
     @Override
 	public User findUserByUserId(int id) {
@@ -106,9 +110,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public void notifySNS(String email) {
-		if(env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
+    if(env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
 		else email = "1-"+email;
-		
 		String topicArn="arn:aws:sns:us-east-1:140710200176:forgotPassword";
 		PublishRequest publishRequest = new PublishRequest(topicArn, email);
 		PublishResult publishResult = snsClient.publish(publishRequest);

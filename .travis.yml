@@ -13,7 +13,7 @@ before_install:
 script:
   - pwd
   - cd app
-  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -Dspring.datasource.username=travis -Dspring.datasource.password=$travis_db_password -B -V
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -Dspring.profiles.active=aws -Dspring.datasource.username=travis -Dspring.datasource.password=$travis_db_password -B -V
   - cd target
   - ls -al
   - cd ../../
@@ -49,7 +49,7 @@ deploy:
     access_key_id: $access_key_id
     secret_access_key: $secret_access_key
     on:
-      branch: assignment6
+      branch: assignment8
   - provider: codedeploy
     access_key_id: $access_key_id
     secret_access_key: $secret_access_key
@@ -61,7 +61,7 @@ deploy:
     region: us-east-1
     wait-until-deployed: true
     on:
-      branch: assignment6
+      branch: assignment8
 
 notifications:
 email:

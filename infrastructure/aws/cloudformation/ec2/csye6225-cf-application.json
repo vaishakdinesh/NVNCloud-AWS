@@ -223,6 +223,11 @@
                   									"Ref": "SecretAccessKey"
                   								},
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                  "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.sns.topic=\"",
+                  								{
+                  									"Ref": "SNSPasswordResetTopic"
+                  								},
+                                  "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
 								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo service tomcat8 restart \n",
                                   {
@@ -259,6 +264,13 @@
                  }
              ]
           }
+        },
+        "SNSPasswordResetTopic":{
+          "Type" : "AWS::SNS::Topic",
+          "Properties" : {
+            "DisplayName" : "forgotPassword",
+            "TopicName" : "forgotPassword"
+          }
         }
       },
 
@@ -272,6 +284,11 @@
           "Description": "EC2 Instance",
           "Value": { "Ref": "EC2Instance"},
           "Export" : { "Name" : "EC2Instance" }
+        },
+        "SNSTopicARN": {
+          "Description": "SNS Topic Arn",
+          "Value": { "Ref": "SNSPasswordResetTopic"},
+          "Export" : { "Name" : "SNSTopicARN" }
         }
       }
 }
