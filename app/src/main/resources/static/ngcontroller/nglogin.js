@@ -132,7 +132,7 @@ app.service('forgot', [ '$http', function($http) {
             url : 'resetpassword',
             method : 'GET',
         }).then(function() {
-        	window.location = "/resetpassword";
+        	window.location = "resetpassword";
         }, function() {
         });
     };
