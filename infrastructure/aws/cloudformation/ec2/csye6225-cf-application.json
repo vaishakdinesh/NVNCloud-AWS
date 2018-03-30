@@ -243,42 +243,50 @@
                               "",
                               [
                                   "#!/bin/bash -xe \n",
-                                  "yum install -y aws-cfn-bootstrap\n",
-                                  "/opt/aws/bin/cfn-init -s ", { "Ref": "AWS::StackId" }, " -r EC2Instance ", " --region ", { "Ref": "AWS::Region" },
-                                  " || error_exit 'Failed to run cfn-init'\n",
-                                  "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py\n",
-                                  "python awslogs-agent-setup.py -n -r ", { "Ref" : "AWS::Region" }, " -c /tmp/cwlogs/cwconfig.conf || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
-                                  "sudo cd /etc/systemd/system",
-                                  "sudo cat <<EOT >> awslogs.service
-                                  [Unit]
-                                  Description=Service for CloudWatch Logs agent
-                                  After=rc-local.service
-
-                                  [Service]
-                                  Type=simple
-                                  Restart=always
-                                  KillMode=process
-                                  TimeoutSec=infinity
-                                  PIDFile=/var/awslogs/state/awslogs.pid
-                                  ExecStart=/var/awslogs/bin/awslogs-agent-launcher.sh --start --background --pidfile $PIDFILE --user awslogs --chuid awslogs &amp;
-
-                                  [Install]
-                                  WantedBy=multi-user.target",
-                                  "sudo systemctl start awslogs.service",
-                                  "sudo systemctl stop awslogs.service",
-                                  "sudo systemctl restart awslogs.service",
-                                  "sudo systemctl enable awslogs.service",
                                   "sudo apt-get update \n",
                                   "sudo apt-get install openjdk-8-jdk -y\n",
                                   "sudo apt-get install ruby -y \n",
                                   "sudo apt-get install wget -y \n",
                                   "sudo apt-get install python -y \n",
                                   "sudo apt-get update \n",
+                                  "sudo apt-get install yum -y",
                                   "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                   "sudo chmod +x ./install \n",
                                   "sudo ./install auto \n",
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
+                                  "sudo yum install -y aws-cfn-bootstrap\n",
+                                  "/opt/aws/bin/cfn-init -s ", { "Ref": "AWS::StackId" }, " -r EC2Instance ", " --region ", { "Ref": "AWS::Region" },
+                                  " || error_exit 'Failed to run cfn-init'\n",
+                                  "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py \n",
+                                  "sudo python awslogs-agent-setup.py -n -r ", { "Ref" : "AWS::Region" }, " -c /tmp/cwlogs/cwconfig.conf || error_exit 'Failed to run CloudWatch Logs agent setup' \n",
+                                  "sudo cd /etc/systemd/system \n",
+                                  {
+                                    "Fn::Join": [
+                                        "",
+                                        ["sudo cat << EOT > awslogs.service",
+                                          "[Unit]",
+                                          "Description=Service for CloudWatch Logs agent",
+                                          "After=rc-local.service",
+
+                                          "[Service]",
+                                          "Type=simple",
+                                          "Restart=always",
+                                          "KillMode=process",
+                                          "TimeoutSec=infinity",
+                                          "PIDFile=/var/awslogs/state/awslogs.pid",
+                                          "ExecStart=/var/awslogs/bin/awslogs-agent-launcher.sh --start --background --pidfile $PIDFILE --user awslogs --chuid awslogs &amp;",
+
+                                          "[Install]",
+                                          "WantedBy=multi-user.target",
+                                          "EOT "
+                                        ]
+                                      ]
+                                    },
+                                  "sudo systemctl start awslogs.service \n",
+                                  "sudo systemctl stop awslogs.service \n",
+                                  "sudo systemctl restart awslogs.service \n",
+                                  "sudo systemctl enable awslogs.service \n",
                                   "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo echo \"export JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   {
@@ -366,6 +374,12 @@
              ]
           }
         },
+        "WebServerLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                  "RetentionInDays": 7
+              }
+          },
         "SNSPasswordResetTopic":{
           "Type" : "AWS::SNS::Topic",
           "Properties" : {
@@ -374,12 +388,6 @@
           }
         }
       },
-      "WebServerLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-                "RetentionInDays": 7
-            }
-        },
       "Outputs": {
         "WebAppS3BucketName": {
           "Description": "Web Application S3 Bucket Name",
