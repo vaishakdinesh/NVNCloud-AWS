@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,6 @@ public class UserService implements IUserService {
     @Value("${amazon.sns.topic}")
     private String snsTopicArn;
     
-
     @Override
 	public User findUserByUserId(int id) {
 		User user = userRepository.findUserByUserId(id);
@@ -110,9 +110,23 @@ public class UserService implements IUserService {
 
 	@Override
 	public void notifySNS(String email) {
-		PublishRequest publishRequest = new PublishRequest(snsTopicArn, email);
+    		if(env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
+		else email = "1-"+email;
+		String topicArn="arn:aws:sns:us-east-1:140710200176:forgotPassword";
+		PublishRequest publishRequest = new PublishRequest(topicArn, email);
 		PublishResult publishResult = snsClient.publish(publishRequest);
 		//print MessageId of message published to SNS topic
 		logger.info("MessageId - " + publishResult.getMessageId());
+	}
+
+	@Override
+	public User updatePassword(String email,String password) {
+		User user = userRepository.findUserByEmail(email);
+		if(user != null){
+			user.setPassword(passwordEncoder.encode(password));
+			return userRepository.save(user);
+		}
+			
+		return null;
 	}
 }
