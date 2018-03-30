@@ -110,7 +110,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public void notifySNS(String email) {
-    		if(env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
+    		if(!env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
 		else email = "1-"+email;
 		String topicArn="arn:aws:sns:us-east-1:140710200176:forgotPassword";
 		PublishRequest publishRequest = new PublishRequest(topicArn, email);
