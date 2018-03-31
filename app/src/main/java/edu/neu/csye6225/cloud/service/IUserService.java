@@ -13,4 +13,5 @@ public interface IUserService {
     boolean activateUser(String token);
     boolean activateUserJmeter(String email);
     void notifySNS(String email);
+    User updatePassword(String email,String password);
 }

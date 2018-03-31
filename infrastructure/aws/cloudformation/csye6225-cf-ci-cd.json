@@ -92,6 +92,34 @@
             ]
          }
       },
+      "CWLogPolicy":{
+         "Type":"AWS::IAM::Policy",
+         "Properties":{
+            "PolicyName":"CW-LogPolicy",
+            "PolicyDocument":{
+               "Version": "2012-10-17",
+               "Statement":[
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "logs:CreateLogGroup",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents",
+                      "logs:DescribeLogStreams"
+                      ],
+                    "Resource": [
+                      "arn:aws:logs:*:*:*"
+                      ]
+                  }
+               ]
+            },
+            "Roles":[
+               {
+                  "Ref":"EC2ServiceRole"
+               }
+            ]
+         }
+      },
       "EC2InstanceProfile":{
          "Type":"AWS::IAM::InstanceProfile",
          "Properties":{
