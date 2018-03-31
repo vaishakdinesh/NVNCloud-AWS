@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -75,6 +77,22 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = "text/plain")
+    public String sendResetLink(@RequestParam String useremail){
+    	iUserService.notifySNS(useremail);
+    	return "An email has been sent with a reset link which will be valid for 20 min.";
+    }
+    
+    @ResponseBody
+	@RequestMapping(value="/resetpassword", method=RequestMethod.POST)
+	public User resetPassword(@RequestParam String password, HttpServletRequest req){
+		String email = (String) req.getSession().getAttribute("resetEmail");
+		System.out.println(email);
+		User user = iUserService.updatePassword(email, password);
+		return user;
+	}
+    
     @ResponseBody
     @RequestMapping(value = "/registration-confirmation", method = RequestMethod.GET, produces = "text/plain")
     public String activateUser(@RequestParam String token){

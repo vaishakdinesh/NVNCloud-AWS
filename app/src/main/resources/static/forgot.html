@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nvn-cloud</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/log-in.css">
+    <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/angular/angular.min.js"></script>
+    <script type="text/javascript" src="ngcontroller/ngforgot.js"></script>
+    <script type="text/javascript" src="js/scroll-spy.js"></script>
+    <style>
+    	.msg{
+    		color:green;
+    	}
+    </style>
+</head>
+<body>
+<div ng-app="forgotApp" ng-controller="forgotCtlr">
+    <!-- nav start -->
+    <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><span class="tweak">nvn</span>-cloud</a>
+            </div>
+        </div>
+    </nav>
+    <!-- nav end -->
+
+    <!-- main content -->
+    <div id="page-top" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <div id="head-box">
+                    <div class="container-fluid text-center">
+                        <h3>
+                            <span class="tweak">nvn</span>-cloud
+                        </h3>
+                        <p>Network Structures and Cloud Computing</p>
+                        <br> <br>
+                        <p>csye6225</p>
+                        <br> <br> <br> <br>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div id="login-box">
+                    <div class="logo">
+                        <h1 class="logo-caption">
+                            <span class="tweak">F</span>orgot <span class="tweak">P</span>assword
+                        </h1>
+                    </div>
+                    <div class="controls">
+                        <form name="resetform" ng-submit=resetLink()>
+                            <div class="error">
+                                <p>
+									<span ng-cloak
+                                          ng-show="loginform.useremail.$touched && loginform.useremail.$invalid">User Email
+										is required.</span> <span ng-cloak
+                                                                  ng-show="useremail.length > 0 && loginform.password.$touched && loginform.password.$invalid">Password
+										is required.</span>
+                                </p>
+                                <p>{{ loginErrorMsg }}</p>
+                            </div>
+                            <input class="form-control" type="text" name="useremail"
+                                   placeholder="User Email" ng-model="useremail" required />
+                            <button type="submit" ng-disabled="logform.$invalid"
+                                    class="btn btn-default btn-block btn-custom">Send Reset Link</button>
+                                    <span class="msg">{{
+										newUserMessage }}</span>
+                            <!--<sec:csrfInput/>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+ </div>
+</div>
+    <!-- user section end -->
+</div>
+</body>
+</html>

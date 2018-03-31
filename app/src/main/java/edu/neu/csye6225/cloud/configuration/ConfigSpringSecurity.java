@@ -29,7 +29,7 @@ public class ConfigSpringSecurity extends WebSecurityConfigurerAdapter{
         .authorizeRequests()
 
 
-        .antMatchers("/","/profilepics/**","/css/**", "/images/**", "/js/**", "/scss/**","/email-check", "/register-user", "/register-confirmation", "/log-in","/viewprofile/**").permitAll()
+        .antMatchers("/","/profilepics/**","/css/**", "/images/**", "/js/**", "/scss/**","/email-check", "/register-user", "/register-confirmation", "/log-in","/viewprofile/**","/forgot","/updatepassword").permitAll()
         .antMatchers("/welcome").hasAnyAuthority("USER")
         .and()
         .formLogin()
