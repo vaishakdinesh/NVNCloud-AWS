@@ -153,84 +153,12 @@
           },
 
     "EC2Instance": {
-    			"Type": "AWS::EC2::Instance",
-          "Metadata":{
-            "Comment": "create cloudwatch configuration file.",
-            "AWS::CloudFormation::Init": {
-            "files": {
-            "/tmp/cwlogs/cwconfig.conf":{
-              "content": {
-                  "Fn::Join": [
-                      "",
-                      [
-                          "[general]\n",
-                          "state_file= /var/awslogs/agent-state\n",
-                          "[/var/lib/tomcat8/logs/Csye6225-aws]\n",
-                          "file = /var/lib/tomcat8/logs/Csye6225-aws\n",
-                          "log_group_name = ", {"Ref": "WebServerLogGroup"}, "\n",
-                          "log_stream_name = {instance_id}/apache.log\n",
-                          "datetime_format = %d/%b/%Y:%H:%M:%S"
-                      ]
-                  ]
-              },
-              "mode": "000400",
-              "owner": "apache",
-              "group": "apache"
-            },
-            "/etc/cfn/cfn-hup.conf": {
-                "content": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "[main]\n",
-                            "stack=",
-                            {
-                                "Ref": "AWS::StackId"
-                            },
-                            "\n",
-                            "region=",
-                            {
-                                "Ref": "AWS::Region"
-                            },
-                            "\n"
-                        ]
-                    ]
-                },
-                "mode": "000400",
-                "owner": "root",
-                "group": "root"
-            },
-            "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
-                "content": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "[cfn-auto-reloader-hook]\n",
-                            "triggers=post.update\n",
-                            "path=Resources.WebServerHost.Metadata.AWS::CloudFormation::Init\n",
-                            "action=/opt/aws/bin/cfn-init -s ",
-                            {
-                                "Ref": "AWS::StackId"
-                            },
-                            " -r EC2Instance ",
-                            " --region     ",
-                            {
-                                "Ref": "AWS::Region"
-                            },
-                            "\n",
-                            "runas=root\n"
-                        ]
-                    ]
-                }
-            }
-            }
-            }
-            },
-    			"Properties": {
-    				"ImageId": { "Ref": "EC2ImageId" },
+                "Type": "AWS::EC2::Instance",
+                "Properties": {
+                    "ImageId": { "Ref": "EC2ImageId" },
             "KeyName" : { "Ref": "KeyPairName" },
             "IamInstanceProfile" :{"Fn::ImportValue" : "EC2InstanceProfile"},
-    				"InstanceType": { "Ref": "EC2InstanceType" },
+                    "InstanceType": { "Ref": "EC2InstanceType" },
             "SecurityGroupIds" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
             "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
             "Tags":[{
@@ -249,95 +177,87 @@
                                   "sudo apt-get install wget -y \n",
                                   "sudo apt-get install python -y \n",
                                   "sudo apt-get update \n",
-                                  "sudo apt-get install yum -y \n",
                                   "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                   "sudo chmod +x ./install \n",
                                   "sudo ./install auto \n",
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
-                                  "sudo yum install -y aws-cfn-bootstrap\n",
-                                  "/opt/aws/bin/cfn-init -s ", { "Ref": "AWS::StackId" }, " -r EC2Instance ", " --region ", { "Ref": "AWS::Region" },
-                                  " || error_exit 'Failed to run cfn-init'\n",
                                   "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py \n",
-                                  "sudo python awslogs-agent-setup.py -n -r ", { "Ref" : "AWS::Region" }, " -c /tmp/cwlogs/cwconfig.conf || error_exit 'Failed to run CloudWatch Logs agent setup' \n",
-                                  "sudo cd /etc/systemd/system \n",
-                                  {
-                                    "Fn::Join": [
-                                        "",
-                                        ["sudo cat <<EOT > awslogs.service \n",
-                                          "[Unit] \n",
-                                          "Description=Service for CloudWatch Logs agent \n",
-                                          "After=rc-local.service \n",
-
-                                          "[Service] \n",
-                                          "Type=simple \n",
-                                          "Restart=always \n",
-                                          "KillMode=process \n",
-                                          "TimeoutSec=infinity \n",
-                                          "PIDFile=/var/awslogs/state/awslogs.pid \n",
-                                          "ExecStart=/var/awslogs/bin/awslogs-agent-launcher.sh --start --background --pidfile $PIDFILE --user awslogs --chuid awslogs &amp; \n",
-
-                                          "[Install] \n",
-                                          "WantedBy=multi-user.target \n",
-                                          "EOT \n"
-                                        ]
-                                      ]
-                                    },
-                                  "sudo systemctl start awslogs.service \n",
-                                  "sudo systemctl stop awslogs.service \n",
-                                  "sudo systemctl restart awslogs.service \n",
+                                  "sudo touch /tmp/cwlogs.conf \n",
+                                  "echo '[general]' >> /tmp/cwlogs.conf \n",
+                                  "echo 'state_file = /var/awslogs/state/agent-state' >> /tmp/cwlogs.conf \n",
+                                  "echo '[/var/lib/tomcat8/logs/csye6225-aws.log]' >> /tmp/cwlogs.conf \n",
+                                  "echo 'file = /var/lib/tomcat8/logs/csye6225-aws.log' >> /tmp/cwlogs.conf \n",
+                                  "echo 'log_stream_name = NVNLogStream' >> /tmp/cwlogs.conf \n",
+                                  "echo 'log_group_name = ", {"Ref":"WebServerLogGroup"},"' >> /tmp/cwlogs.conf \n",
+                                  "echo 'initial_position = start_of_file' >> /tmp/cwlogs.conf \n",
+                                  "sudo python ./awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs.conf  \n",
+                                  "cd /etc/systemd/system \n",
+                                  "sudo touch awslogs.service \n",
+                                  "echo '[Unit]' >> awslogs.service \n",
+                                  "echo 'Description=Service for CloudWatch Logs agent' >> awslogs.service \n",
+                                  "echo 'After=rc-local.service' >> awslogs.service \n",
+                                  "echo '[Service]' >> awslogs.service \n",
+                                  "echo 'Type=simple' >> awslogs.service \n",
+                                  "echo 'Restart=always' >> awslogs.service \n",
+                                  "echo 'KillMode=process' >> awslogs.service \n",
+                                  "echo 'TimeoutSec=infinity' >> awslogs.service \n",
+                                  "echo 'PIDFile=/var/awslogs/state/awslogs.pid' >> awslogs.service \n",
+                                  "echo 'ExecStart=/var/awslogs/bin/awslogs-agent-launcher.sh --start --background --pidfile $PIDFILE --user awslogs --chuid awslogs &' >> awslogs.service \n",
+                                  "echo '[Install]' >> awslogs.service \n",
+                                  "echo 'WantedBy=multi-user.target' >> awslogs.service \n",
                                   "sudo systemctl enable awslogs.service \n",
                                   "echo '#!/bin/sh' >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo echo \"export JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=aws\\\"\" >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   {
-                  									"Fn::Join": [
-                  										"", [
-                  											"echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
-                  											{
-                  												"Fn::GetAtt": [
-                  													"NVNCloudRDSDB",
-                  													"Endpoint.Address"
-                  												]
-                  											},
-                  											":3306/",
-                  											{
-                  												"Ref": "DBName"
-                  											},
-                  											"\"\"'>> /usr/share/tomcat8/bin/setenv.sh \n"
-                  										]
-                  									]
-                  								},
-                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=\"",
-                  								{
-                  									"Ref": "DBUser"
-                  								},
-                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
-                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=\"",
-                  								{
-                  									"Ref": "DBPassword"
-                  								},
-                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
-                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.s3.default-bucket=\"",
-                  								{
-                  									"Ref": "bucketName"
-                  								},
+                                                    "Fn::Join": [
+                                                        "", [
+                                                            "echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
+                                                            {
+                                                                "Fn::GetAtt": [
+                                                                    "NVNCloudRDSDB",
+                                                                    "Endpoint.Address"
+                                                                ]
+                                                            },
+                                                            ":3306/",
+                                                            {
+                                                                "Ref": "DBName"
+                                                            },
+                                                            "\"\"'>> /usr/share/tomcat8/bin/setenv.sh \n"
+                                                        ]
+                                                    ]
+                                                },
+                                                "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=\"",
+                                                {
+                                                    "Ref": "DBUser"
+                                                },
+                                                "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                                "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=\"",
+                                                {
+                                                    "Ref": "DBPassword"
+                                                },
+                                                "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                                "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.s3.default-bucket=\"",
+                                                {
+                                                    "Ref": "bucketName"
+                                                },
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-key-id=\"",
-                  								{
-                  									"Ref": "AccessKeyId"
-                  								},
-                  								"\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
-                  								"echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-secret-key=\"",
-                  								{
-                  									"Ref": "SecretAccessKey"
-                  								},
+                                                {
+                                                    "Ref": "AccessKeyId"
+                                                },
+                                                "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
+                                                "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Daws.access-secret-key=\"",
+                                                {
+                                                    "Ref": "SecretAccessKey"
+                                                },
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
                                   "echo 'export JAVA_OPTS=\"$JAVA_OPTS -Damazon.sns.topic=\"",
-                  								{
-                  									"Ref": "SNSPasswordResetTopic"
-                  								},
+                                                {
+                                                    "Ref": "SNSPasswordResetTopic"
+                                                },
                                   "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
-								                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
+                                                  "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
                                   "sudo service tomcat8 restart \n",
                                   {
                                     "Fn::Join":[
