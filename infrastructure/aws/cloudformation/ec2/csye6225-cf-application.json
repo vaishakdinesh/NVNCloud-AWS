@@ -153,12 +153,12 @@
           },
 
     "EC2Instance": {
-                "Type": "AWS::EC2::Instance",
-                "Properties": {
-                    "ImageId": { "Ref": "EC2ImageId" },
+          "Type": "AWS::EC2::Instance",
+          "Properties": {
+    				"ImageId": { "Ref": "EC2ImageId" },
             "KeyName" : { "Ref": "KeyPairName" },
             "IamInstanceProfile" :{"Fn::ImportValue" : "EC2InstanceProfile"},
-                    "InstanceType": { "Ref": "EC2InstanceType" },
+            "InstanceType": { "Ref": "EC2InstanceType" },
             "SecurityGroupIds" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
             "SubnetId" : { "Fn::ImportValue" :"PublicSubnet"},
             "Tags":[{
@@ -293,34 +293,34 @@
                  }
              ]
           }
-        },
-        "WebServerLogGroup": {
+    },
+    "WebServerLogGroup": {
               "Type": "AWS::Logs::LogGroup",
               "Properties": {
                   "RetentionInDays": 7
               }
-          },
-        "EC2ElasticIP" : {
-          "Type" : "AWS::EC2::EIP",
-          "Properties" : {
-            "Domain" : "vpc"
-          }
-        },
-        "EIPAssociation" : {
-          "Type" : "AWS::EC2::EIPAssociation",
-          "Properties" : {
-            "AllocationId" : { "Fn::GetAtt" : [ "EC2ElasticIP", "AllocationId" ]},
-            "InstanceId": {"Ref": "EC2Instance"}
-          }
-        },
-        "SNSPasswordResetTopic":{
-          "Type" : "AWS::SNS::Topic",
-          "Properties" : {
-            "DisplayName" : "forgotPassword",
-            "TopicName" : "forgotPassword"
-          }
+      },
+      "EC2ElasticIP" : {
+        "Type" : "AWS::EC2::EIP",
+        "Properties" : {
+          "Domain" : "vpc"
         }
       },
+      "EIPAssociation" : {
+        "Type" : "AWS::EC2::EIPAssociation",
+        "Properties" : {
+          "AllocationId" : { "Fn::GetAtt" : [ "EC2ElasticIP", "AllocationId" ]},
+          "InstanceId": {"Ref": "EC2Instance"}
+        }
+      },
+      "SNSPasswordResetTopic":{
+        "Type" : "AWS::SNS::Topic",
+        "Properties" : {
+          "DisplayName" : "forgotPassword",
+          "TopicName" : "forgotPassword"
+        }
+      }
+    },
       "Outputs": {
         "WebAppS3BucketName": {
           "Description": "Web Application S3 Bucket Name",
@@ -337,5 +337,6 @@
           "Value": { "Ref": "SNSPasswordResetTopic"},
           "Export" : { "Name" : "SNSTopicARN" }
         }
-      }
+
+}
 }
