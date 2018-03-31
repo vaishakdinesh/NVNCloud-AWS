@@ -154,78 +154,6 @@
 
     "EC2Instance": {
     			"Type": "AWS::EC2::Instance",
-          "Metadata":{
-            "Comment": "create cloudwatch configuration file.",
-            "AWS::CloudFormation::Init": {
-            "files": {
-            "/tmp/cwlogs/cwconfig.conf":{
-              "content": {
-                  "Fn::Join": [
-                      "",
-                      [
-                          "[general]\n",
-                          "state_file= /var/awslogs/agent-state\n",
-                          "[/var/lib/tomcat8/logs/Csye6225-aws]\n",
-                          "file = /var/lib/tomcat8/logs/Csye6225-aws\n",
-                          "log_group_name = ", {"Ref": "WebServerLogGroup"}, "\n",
-                          "log_stream_name = {instance_id}/apache.log\n",
-                          "datetime_format = %d/%b/%Y:%H:%M:%S"
-                      ]
-                  ]
-              },
-              "mode": "000400",
-              "owner": "apache",
-              "group": "apache"
-            },
-            "/etc/cfn/cfn-hup.conf": {
-                "content": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "[main]\n",
-                            "stack=",
-                            {
-                                "Ref": "AWS::StackId"
-                            },
-                            "\n",
-                            "region=",
-                            {
-                                "Ref": "AWS::Region"
-                            },
-                            "\n"
-                        ]
-                    ]
-                },
-                "mode": "000400",
-                "owner": "root",
-                "group": "root"
-            },
-            "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
-                "content": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "[cfn-auto-reloader-hook]\n",
-                            "triggers=post.update\n",
-                            "path=Resources.WebServerHost.Metadata.AWS::CloudFormation::Init\n",
-                            "action=/opt/aws/bin/cfn-init -s ",
-                            {
-                                "Ref": "AWS::StackId"
-                            },
-                            " -r EC2Instance ",
-                            " --region     ",
-                            {
-                                "Ref": "AWS::Region"
-                            },
-                            "\n",
-                            "runas=root\n"
-                        ]
-                    ]
-                }
-            }
-            }
-            }
-            },
     			"Properties": {
     				"ImageId": { "Ref": "EC2ImageId" },
             "KeyName" : { "Ref": "KeyPairName" },
@@ -249,17 +177,22 @@
                                   "sudo apt-get install wget -y \n",
                                   "sudo apt-get install python -y \n",
                                   "sudo apt-get update \n",
-                                  "sudo apt-get install yum -y \n",
                                   "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                   "sudo chmod +x ./install \n",
                                   "sudo ./install auto \n",
                                   "sudo service codedeploy-agent start \n",
                                   "sudo apt-get install tomcat8 -y \n",
-                                  "sudo yum install -y aws-cfn-bootstrap\n",
-                                  "/opt/aws/bin/cfn-init -s ", { "Ref": "AWS::StackId" }, " -r EC2Instance ", " --region ", { "Ref": "AWS::Region" },
-                                  " || error_exit 'Failed to run cfn-init'\n",
                                   "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py \n",
-                                  "sudo python awslogs-agent-setup.py -n -r ", { "Ref" : "AWS::Region" }, " -c /tmp/cwlogs/cwconfig.conf || error_exit 'Failed to run CloudWatch Logs agent setup' \n",
+                                  "sudo touch /tmp/cwlogs.conf \n",
+                                  "echo [general] > /tmp/cwlogs.conf \n",
+                                  "echo state_file = /var/awslogs/state/agent-state > /tmp/cwlogs.conf \n",
+                                  "echo \n > /tmp/cwlogs.conf \n",
+                                  "echo [/var/log/syslog] > /tmp/cwlogs.conf \n",
+                                  "echo file = /var/log/syslog > /tmp/cwlogs.conf \n",
+                                  "echo log_stream_name = syslog > /tmp/cwlogs.conf \n",
+                                  "echo log_group_name = stage > /tmp/cwlogs.conf \n",
+                                  "echo initial_position = start_of_file > /tmp/cwlogs.conf \n",
+                                  "sudo python awslogs-agent-setup.py -n -r ", { "Ref" : "AWS::Region" }, " -c /tmp/cwlogs.conf  \n",
                                   "sudo cd /etc/systemd/system \n",
                                   {
                                     "Fn::Join": [
@@ -372,25 +305,6 @@
                     }
                  }
              ]
-          }
-        },
-        "WebServerLogGroup": {
-              "Type": "AWS::Logs::LogGroup",
-              "Properties": {
-                  "RetentionInDays": 7
-              }
-          },
-        "EC2ElasticIP" : {
-          "Type" : "AWS::EC2::EIP",
-          "Properties" : {
-            "Domain" : "vpc"
-          }
-        },
-        "EIPAssociation" : {
-          "Type" : "AWS::EC2::EIPAssociation",
-          "Properties" : {
-            "AllocationId" : { "Fn::GetAtt" : [ "EC2ElasticIP", "AllocationId" ]},
-            "InstanceId": {"Ref": "EC2Instance"}
           }
         },
         "SNSPasswordResetTopic":{
