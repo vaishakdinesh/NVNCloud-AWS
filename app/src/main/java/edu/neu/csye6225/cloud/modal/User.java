@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Component
 @Entity
 @Table(name = "users")
@@ -19,6 +21,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 60)
     private String password;
 
@@ -34,7 +37,8 @@ public class User {
 
     @Column (name = "isactive", nullable = false)
     private boolean isActive;
-
+    
+    @JsonIgnore
     @Column (name = "token", nullable = false, unique = true)
     private String token;
 

@@ -68,11 +68,7 @@ public class HuskycloudApplicationTests {
 			.param("lastname","dinesh")
 			.param("useremail","dinesh.v@gmail.com")
 			.param("password","v"))
-				.andDo(print()).andExpect(status().isOk())
-				.andExpect(
-						content().string(containsString("User registration " +
-								"successful. Please activate your account by using " +
-								"activation link sent to your email.")));
+				.andDo(print()).andExpect(status().isOk());
 	}
 
 }
