@@ -341,7 +341,15 @@
           "DeploymentGroupName": "NvnCloudDeployGroup",
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
           "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
-          "Ec2TagFilters": [{"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2"}],
+          "Ec2TagFilters": [
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-1"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-2"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-3"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-4"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-5"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-6"},
+            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-7"}
+          ],
           "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }
       },
