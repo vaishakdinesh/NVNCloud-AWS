@@ -20,7 +20,7 @@ echo "Starting $StackName autoscaling setup"
 echo "Starting to create the stack......"
 
 createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
-  --template-body file://csye6225-cf-application.json \
+  --template-body file://csye6225-aws-cf-autoscaling.json \
   --parameters ParameterKey=DBName,ParameterValue=csye6225 \
   ParameterKey=DBUser,ParameterValue=csye6225master \
   ParameterKey=DBPassword,ParameterValue=csye6225password \

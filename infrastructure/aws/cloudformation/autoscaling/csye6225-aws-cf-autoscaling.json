@@ -153,10 +153,7 @@
                                                           "", [
                                                               "echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
                                                               {
-                                                                  "Fn::GetAtt": [
-                                                                      "NVNCloudRDSDB",
-                                                                      "Endpoint.Address"
-                                                                  ]
+                                                                     "Fn::ImportValue" : "NVNRDSEndpoint"                                                              
                                                               },
                                                               ":3306/",
                                                               {
@@ -322,7 +319,7 @@
               "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
               "Properties" : {
                 "Name" : "NVN-Cloud-LoadBalancer",
-                "Subnets" : [ { "Fn::ImportValue" :"PublicSubnet1"}, { "Fn::ImportValue" :"PublicSubnet2"} ],
+                "Subnets" : [ { "Fn::ImportValue" :"PublicSubnet1"}, { "Fn::ImportValue" :"PublicSubnet2"} ]
               }
             },
             "NVNLoadBalancerListner" : {
@@ -357,3 +354,4 @@
           "Export" : { "Name" : "SNSTopicARN" }
         }
       }
+}
