@@ -214,6 +214,11 @@
         "Description": "Public subnet for EC2",
         "Value": { "Ref": "PublicSubnet2"},
         "Export" : { "Name":"PublicSubnet2" }
+      },
+      "VpcId":{
+        "Description": "VPC ID",
+        "Value": { "Ref": "VPC"},
+        "Export" : { "Name":"VpcId" }
       }
     }
   }
