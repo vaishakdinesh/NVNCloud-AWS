@@ -15,10 +15,6 @@
   			"Description": "Database Password",
   			"Type": "String"
   		},
-  		"bucketName": {
-  			"Description": "Bucket name",
-  			"Type": "String"
-  		},
       "EC2ImageId":{
         "Description": "EC2 ImageId",
   			"Type": "String"
@@ -62,8 +58,9 @@
               "Type" : "AWS::AutoScaling::AutoScalingGroup",
               "Properties" : {
                 "Cooldown" : "60",
-                "VPCZoneIdentifier" : [{ "Fn::ImportValue" :"PublicSubnet"}],
+                "VPCZoneIdentifier" : [{ "Fn::ImportValue" :"PublicSubnet1"}, { "Fn::ImportValue" :"PublicSubnet2"}],
                 "DesiredCapacity" : "3",
+                "TargetGroupARNs" : [ { "Ref" : "NVNLoadBalancerTargetGroup" } ],
                 "LaunchConfigurationName" : { "Ref" : "NVNLaunchConfig" },
                 "MinSize" : "3",
                 "MaxSize" : "7",
@@ -325,21 +322,19 @@
               "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
               "Properties" : {
                 "Name" : "NVN-Cloud-LoadBalancer",
-                "Subnets" : [ { "Fn::ImportValue" :"PublicSubnet"} ],
+                "Subnets" : [ { "Fn::ImportValue" :"PublicSubnet1"}, { "Fn::ImportValue" :"PublicSubnet2"} ],
               }
             },
             "NVNLoadBalancerListner" : {
               "Type" : "AWS::ElasticLoadBalancingV2::Listener",
               "Properties" : {
-                "Certificates" : [ Certificate ],
                 "DefaultActions" : [{
                   "Type" : "forward",
                   "TargetGroupArn" : { "Ref" : "NVNLoadBalancerTargetGroup" }
                 }],
                 "LoadBalancerArn" : { "Ref" : "NVNLoadBalancer" },
                 "Port" : 80,
-                "Protocol" : "HTTPS",
-                "SslPolicy" : String
+                "Protocol" : "HTTP"
               }
             },
             "NVNLoadBalancerTargetGroup" : {
@@ -349,16 +344,9 @@
                 "HealthCheckTimeoutSeconds" : 5,
                 "HealthyThresholdCount" : 3,
                 "Port" : 80,
-                "Protocol" : "HTTPS",
+                "Protocol" : "HTTP",
                 "UnhealthyThresholdCount" : 5,
-                "VpcId" : { "Fn::ImportValue" : VpcId}
-              }
-            },
-            "NVNLoadBalancerCertificate" : {
-              "Type" : "AWS::ElasticLoadBalancingV2::ListenerCertificate",
-              "Properties" : {
-                "Certificates" : [ Certificate, ... ],
-                "ListenerArn" : String
+                "VpcId" : { "Fn::ImportValue" : "VpcId"}
               }
             }
       },
