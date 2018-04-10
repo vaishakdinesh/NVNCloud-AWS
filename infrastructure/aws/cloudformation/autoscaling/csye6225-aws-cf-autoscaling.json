@@ -58,7 +58,11 @@
       "HostedZoneResource": {
         "Description": "HostedZoneResource",
         "Type": "String"
-     }
+     },
+      "HostedZoneId": {
+        "Description": "HostedZoneId",
+        "Type": "String"
+    }
     },
 
     "Resources" : {
@@ -357,7 +361,8 @@
             "myDNSRecord" : {
               "Type" : "AWS::Route53::RecordSet",
               "Properties" : {
-                "HostedZoneName" : { "Ref" : "HostedZoneResource" },
+                "HostedZoneName" : {"Ref" : "HostedZoneResource"},
+                "HostedZoneId" :{"Ref":"HostedZoneId"},
                 "Comment" : "DNS name for my instance.",
                 "Name" : {
                   "Fn::Join" : [ "", [
@@ -366,7 +371,6 @@
                 "Type" : "A",
                 "TTL" : "900",
                 "AliasTarget" : {
-                  "HostedZoneId" : { "Fn::GetAtt" : ["NVNLoadBalancer", "CanonicalHostedZoneNameID"] },
                   "DNSName" : { "Fn::GetAtt" : ["NVNLoadBalancer","DNSName"] }
                 }
               }
