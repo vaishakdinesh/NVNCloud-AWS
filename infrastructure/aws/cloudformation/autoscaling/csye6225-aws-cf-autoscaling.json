@@ -54,7 +54,11 @@
       "MySqlClientPass":{
         "Description": "Root password for MySQL client on EC2 Instance",
         "Type": "String"
-      }
+      },
+      "HostedZoneResource": {
+        "Description": "HostedZoneResource",
+        "Type": "String"
+     }
     },
 
     "Resources" : {
@@ -348,6 +352,23 @@
                 "Protocol" : "HTTP",
                 "UnhealthyThresholdCount" : 5,
                 "VpcId" : { "Fn::ImportValue" : "VpcId"}
+              }
+            },
+            "myDNSRecord" : {
+              "Type" : "AWS::Route53::RecordSet",
+              "Properties" : {
+                "HostedZoneName" : { "Ref" : "HostedZoneResource" },
+                "Comment" : "DNS name for my instance.",
+                "Name" : {
+                  "Fn::Join" : [ "", [
+                    {"Ref" : "HostedZoneResource"}, "."] ]
+                    },
+                "Type" : "A",
+                "TTL" : "900",
+                "AliasTarget" : {
+                  "HostedZoneId" : { "Fn::GetAtt" : ["NVNLoadBalancer", "CanonicalHostedZoneNameID"] },
+                  "DNSName" : { "Fn::GetAtt" : ["NVNLoadBalancer","DNSName"] }
+                }
               }
             }
       },
