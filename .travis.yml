@@ -61,7 +61,7 @@ deploy:
     region: us-east-1
     wait-until-deployed: true
     on:
-      branch: assignment8
+      branch: assignment9
 
 notifications:
 email:
