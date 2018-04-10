@@ -13,6 +13,7 @@ if [ -z "$DomainName" ]; then
   echo "No domain name provided. Script exiting.."
   exit 1
 fi
+BucketName=web-app.$DomainName.me
 #DomainName=code-deploy.$DomainName.me
 
 echo "Starting $StackName autoscaling setup"
@@ -32,6 +33,7 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=KeyPairName,ParameterValue=keypair \
   ParameterKey=AccessKeyId,ParameterValue=$AccessKeyId \
   ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey \
+  ParameterKey=bucketName,ParameterValue=$BucketName \
   ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass`
 
   if [ -z "$createStackStatus" ]; then

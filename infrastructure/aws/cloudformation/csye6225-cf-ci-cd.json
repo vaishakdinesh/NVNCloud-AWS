@@ -342,13 +342,13 @@
           "ApplicationName": {"Ref" :"CodeDeployApplication"},
           "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
           "Ec2TagFilters": [
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-1"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-2"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-3"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-4"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-5"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-6"},
-            {"Key":"Name","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-7"}
+            {"Key":"EC2Name1","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-1"},
+            {"Key":"EC2Name2","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-2"},
+            {"Key":"EC2Name3","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-3"},
+            {"Key":"EC2Name4","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-4"},
+            {"Key":"EC2Name5","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-5"},
+            {"Key":"EC2Name6","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-6"},
+            {"Key":"EC2Name7","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-7"}
           ],
           "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
         }

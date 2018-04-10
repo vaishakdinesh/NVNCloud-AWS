@@ -39,6 +39,10 @@
         "Description": "Key Pair Name",
   			"Type": "String"
       },
+      "bucketName": {
+  			"Description": "Bucket name",
+  			"Type": "String"
+  		},
       "AccessKeyId": {
 			"Description": "Access key",
 			"Type": "String"
@@ -65,31 +69,31 @@
                 "MinSize" : "3",
                 "MaxSize" : "7",
                 "Tags" : [ {
-                   "Key" : "Name",
+                   "Key" : "EC2Name1",
                    "Value" : "NVNCloudEC2-1",
                    "PropagateAtLaunch" : "true"
                 }, {
-                   "Key" : "Name",
+                   "Key" : "EC2Name2",
                    "Value" : "NVNCloudEC2-2",
                    "PropagateAtLaunch" : "true"
                 }, {
-                   "Key" : "Name",
+                   "Key" : "EC2Name3",
                    "Value" : "NVNCloudEC2-3",
                    "PropagateAtLaunch" : "true"
                 } , {
-                   "Key" : "Name",
+                   "Key" : "EC2Name4",
                    "Value" : "NVNCloudEC2-4",
                    "PropagateAtLaunch" : "false"
                 } , {
-                   "Key" : "Name",
+                   "Key" : "EC2Name5",
                    "Value" : "NVNCloudEC2-5",
                    "PropagateAtLaunch" : "false"
                 } , {
-                   "Key" : "Name",
+                   "Key" : "EC2Name6",
                    "Value" : "NVNCloudEC2-6",
                    "PropagateAtLaunch" : "false"
                 } , {
-                   "Key" : "Name",
+                   "Key" : "EC2Name7",
                    "Value" : "NVNCloudEC2-7",
                    "PropagateAtLaunch" : "false"
                 } ]
@@ -102,7 +106,7 @@
               "KeyName" : { "Ref": "KeyPairName" },
               "IamInstanceProfile" :{"Fn::ImportValue" : "EC2InstanceProfile"},
               "InstanceType": { "Ref": "EC2InstanceType" },
-              "SecurityGroupIds" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
+              "SecurityGroups" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
               "AssociatePublicIpAddress": true,
               "UserData": {
                         "Fn::Base64": {
@@ -153,7 +157,7 @@
                                                           "", [
                                                               "echo ' export JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=\"jdbc:mysql://",
                                                               {
-                                                                     "Fn::ImportValue" : "NVNRDSEndpoint"                                                              
+                                                                     "Fn::ImportValue" : "NVNRDSEndpoint"
                                                               },
                                                               ":3306/",
                                                               {
