@@ -323,6 +323,7 @@
               "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
               "Properties" : {
                 "Name" : "NVN-Cloud-LoadBalancer",
+                "SecurityGroups" : [ { "Fn::ImportValue" : "EC2GroupName"} ],
                 "Subnets" : [ { "Fn::ImportValue" :"PublicSubnet1"}, { "Fn::ImportValue" :"PublicSubnet2"} ]
               }
             },
@@ -344,7 +345,7 @@
                 "HealthCheckIntervalSeconds" : 30,
                 "HealthCheckTimeoutSeconds" : 5,
                 "HealthyThresholdCount" : 3,
-                "Port" : 80,
+                "Port" : 8080,
                 "Protocol" : "HTTP",
                 "UnhealthyThresholdCount" : 5,
                 "VpcId" : { "Fn::ImportValue" : "VpcId"}
