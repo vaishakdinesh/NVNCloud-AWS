@@ -4,6 +4,10 @@ stackstatus=""
 createStackStatus=""
 createFlag=true
 DomainName=$2
+AccessKeyId=$3
+SecretAccessKey=$4
+MySqlClientPass=$5
+HostedZoneId=$6
 
 if [ -z "$StackName" ]; then
   echo "No stack name provided. Script exiting.."
@@ -14,7 +18,7 @@ if [ -z "$DomainName" ]; then
   exit 1
 fi
 BucketName=web-app.$DomainName.me
-#DomainName=code-deploy.$DomainName.me
+DomainName=csye6225-spring2018-$DomainName.me
 
 echo "Starting $StackName autoscaling setup"
 
@@ -34,7 +38,9 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=AccessKeyId,ParameterValue=$AccessKeyId \
   ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey \
   ParameterKey=bucketName,ParameterValue=$BucketName \
-  ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass`
+  ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass \
+  ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
+  ParameterKey=HostedZoneResource,ParameterValue=$DomainName`
 
   if [ -z "$createStackStatus" ]; then
     echo "Failed to create stack"

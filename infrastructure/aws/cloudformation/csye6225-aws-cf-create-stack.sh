@@ -30,7 +30,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
       echo "$@ creation failed! "
       aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==`CREATE_FAILED`)]'
       echo "deleting stack..... "
-      # bash ./csye6225-aws-cf-terminate-stack.sh $StackName
+      bash ./csye6225-aws-cf-terminate-stack.sh $StackName
       break
     fi
   }
