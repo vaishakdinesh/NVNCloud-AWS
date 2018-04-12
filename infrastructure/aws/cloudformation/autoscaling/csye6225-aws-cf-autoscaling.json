@@ -339,8 +339,11 @@
                   "TargetGroupArn" : { "Ref" : "NVNLoadBalancerTargetGroup" }
                 }],
                 "LoadBalancerArn" : { "Ref" : "NVNLoadBalancer" },
-                "Port" : 80,
-                "Protocol" : "HTTP"
+                "Port" : 443,
+                "Protocol" : "HTTPS",
+                "Certificates" : [
+                  { "CertificateArn" : { "Ref" : "SSLCertificate" } }
+                ]
               }
             },
             "NVNLoadBalancerTargetGroup" : {
@@ -353,6 +356,12 @@
                 "Protocol" : "HTTP",
                 "UnhealthyThresholdCount" : 5,
                 "VpcId" : { "Fn::ImportValue" : "VpcId"}
+              }
+            },
+            "SSLCertificate" : {
+              "Type" : "AWS::CertificateManager::Certificate",
+              "Properties" : {
+                "DomainName" : {"Ref" : "HostedZoneResource"}
               }
             },
             "myDNSRecord" : {
