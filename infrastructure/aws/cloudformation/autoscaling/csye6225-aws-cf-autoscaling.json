@@ -58,11 +58,7 @@
       "HostedZoneResource": {
         "Description": "HostedZoneResource",
         "Type": "String"
-     },
-      "HostedZoneId": {
-        "Description": "HostedZoneId",
-        "Type": "String"
-    }
+     }
     },
 
     "Resources" : {
