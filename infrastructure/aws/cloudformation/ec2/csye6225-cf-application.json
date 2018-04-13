@@ -120,6 +120,11 @@
           "Description": "Web Application S3 Bucket Name",
           "Value": { "Ref": "NVNCloudS3Bucket"},
           "Export" : { "Name" : "WebAppS3BucketName" }
+        },
+        "NVNRDSEndpoint": {
+          "Description": "RDS Database",
+          "Value": { "Fn::GetAtt" : ["NVNCloudRDSDB", "Endpoint.Address"]},
+          "Export" : { "Name" : "NVNRDSEndpoint" }
         }
       }
 }

@@ -34,16 +34,7 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=DBEngineVersion,ParameterValue=5.6.37 \
   ParameterKey=DBInstanceClass,ParameterValue=db.t2.medium \
   ParameterKey=DBInstanceIdentifier,ParameterValue=csye6225-spring2018 \
-  ParameterKey=EC2ImageId,ParameterValue=ami-66506c1c \
-  ParameterKey=EC2InstanceType,ParameterValue=t2.micro \
-  ParameterKey=EbsDeviceName,ParameterValue=/dev/sda1 \
-  ParameterKey=EbsVolumeType,ParameterValue=gp2 \
-  ParameterKey=EbsVolumeSize,ParameterValue=16 \
-  ParameterKey=KeyPairName,ParameterValue=keypair \
-  ParameterKey=bucketName,ParameterValue=$DomainName \
-  ParameterKey=AccessKeyId,ParameterValue=$AccessKeyId \
-  ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey \
-  ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass`
+  ParameterKey=bucketName,ParameterValue=$DomainName`
 
 if [ -z "$createStackStatus" ]; then
   echo "Failed to create stack"
