@@ -63,7 +63,7 @@ public class UserController {
                User savedUser = iUserService.saveUser(firstname, lastname, useremail, password);
                if(savedUser != null){
                    emailServiceImp.sendVerificationMail(savedUser,
-                           request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort());
+                           request.getHeader("referer"));
                    return "User registration successful. Please activate your account by using activation link sent to your email.";
                } else {
                    return "Unable to save the user. Try again later.";
