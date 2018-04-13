@@ -221,7 +221,7 @@
                                     "sudo apt-get update \n",
                                     "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                     "sudo chmod +x ./install \n",
-                                    "sudo ./install auto \n"
+                                    "sudo ./install auto \n",
                                     "sudo service codedeploy-agent start \n"
                                 ]
                             ]
