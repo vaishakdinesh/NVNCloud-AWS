@@ -12,7 +12,7 @@ public class EmailServiceImp {
     @Autowired
     private JavaMailSender eMailSender;
 
-    private final String CONFIRMATION_URL = "/registration-confirmation?token=";
+    private final String CONFIRMATION_URL = "registration-confirmation?token=";
     private final String VERIFICATION_MESSAGE = "Click this link to activate your account with nvn-cloud.";
 
     public void sendVerificationMail(User user, String path){
