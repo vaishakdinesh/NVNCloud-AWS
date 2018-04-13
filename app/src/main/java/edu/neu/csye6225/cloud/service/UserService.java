@@ -112,8 +112,7 @@ public class UserService implements IUserService {
 	public void notifySNS(String email) {
     		if(!env.getActiveProfiles()[0].equals("aws")) email = "0-"+email;
 		else email = "1-"+email;
-		String topicArn="arn:aws:sns:us-east-1:140710200176:forgotPassword";
-		PublishRequest publishRequest = new PublishRequest(topicArn, email);
+		PublishRequest publishRequest = new PublishRequest(snsTopicArn, email);
 		PublishResult publishResult = snsClient.publish(publishRequest);
 		//print MessageId of message published to SNS topic
 		logger.info("MessageId - " + publishResult.getMessageId());
