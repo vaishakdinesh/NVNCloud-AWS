@@ -127,7 +127,6 @@
                                     "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                     "sudo chmod +x ./install \n",
                                     "sudo ./install auto \n",
-                                    "sudo service codedeploy-agent start \n",
                                     "sudo apt-get install tomcat8 -y \n",
                                     "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py \n",
                                     "sudo touch /tmp/cwlogs.conf \n",
@@ -221,6 +220,7 @@
                                         ]
                                       ]
                                     },
+                                    "sudo service codedeploy-agent start \n",
                                     "sudo apt-get -y install mysql-server \n"
                                 ]
                             ]
@@ -378,6 +378,229 @@
               "Type" : "AWS::CertificateManager::Certificate",
               "Properties" : {
                 "DomainName" : {"Ref" : "HostedZoneResource"}
+              }
+            },
+            "CodeDeployServiceRole":{
+               "Type":"AWS::IAM::Role",
+               "Properties":{
+                  "ManagedPolicyArns":[
+                     "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+                  ],
+                  "AssumeRolePolicyDocument":{
+                     "Statement":[
+                        {
+                           "Effect":"Allow",
+                           "Principal":{
+                              "Service":[
+                                 "codedeploy.us-east-1.amazonaws.com"
+                              ]
+                           },
+                           "Action":[
+                              "sts:AssumeRole"
+                           ]
+                        }
+                     ]
+                  },
+                  "Path":"/"
+               }
+            },
+            "TravisCodeDeployPolicy":{
+               "Type":"AWS::IAM::ManagedPolicy",
+               "Properties":{
+                  "ManagedPolicyName":"Travis-Code-Deploy-Policy",
+                  "PolicyDocument":{
+                     "Version": "2012-10-17",
+                     "Statement":[
+                        {
+                           "Effect":"Allow",
+                           "Action":[
+                              "codedeploy:RegisterApplicationRevision",
+                              "codedeploy:GetApplicationRevision"
+                           ],
+                           "Resource":[
+                             {
+                                "Fn::Join":[
+                                   "",
+                                   [
+                                      "arn:aws:codedeploy:",
+                                      {
+                                         "Ref":"AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref":"AWS::AccountId"
+                                      },
+                                      ":application:",
+                                      {
+                                        "Ref":"CodeDeployApplication"
+                                      }
+                                   ]
+                                ]
+                             }
+                           ]
+                        },
+                        {
+                           "Effect":"Allow",
+                           "Action":[
+                              "codedeploy:CreateDeployment",
+                              "codedeploy:GetDeployment"
+                           ],
+                           "Resource":[
+                             {
+                               "Fn::Join":[
+                                  "",
+                                  [
+                                     "arn:aws:codedeploy:",
+                                     {
+                                        "Ref":"AWS::Region"
+                                     },
+                                     ":",
+                                     {
+                                       "Ref":"AWS::AccountId"
+                                     },
+                                     ":deploymentgroup:",
+                                     {
+                                       "Ref": "CodeDeployApplication"
+                                     },
+                                     "/*"
+                                  ]
+                               ]
+                             },
+                             {
+                              "Fn::Join":[
+                                 "",
+                                 [
+                                    "arn:aws:codedeploy:",
+                                    {
+                                       "Ref":"AWS::Region"
+                                    },
+                                    ":",
+                                    {
+                                      "Ref":"AWS::AccountId"
+                                    },
+                                    ":deploymentconfig:CodeDeployDefault.OneAtATime"
+                                 ]
+                              ]
+                           },
+                           {
+                              "Fn::Join":[
+                                 "",
+                                 [
+                                    "arn:aws:codedeploy:",
+                                    {
+                                       "Ref":"AWS::Region"
+                                    },
+                                    ":",
+                                    {
+                                      "Ref":"AWS::AccountId"
+                                    },
+                                    ":deploymentconfig:CodeDeployDefault.HalfAtATime"
+                                 ]
+                              ]
+                           },
+                           {
+                              "Fn::Join":[
+                                 "",
+                                 [
+                                    "arn:aws:codedeploy:",
+                                    {
+                                       "Ref":"AWS::Region"
+                                    },
+                                    ":",
+                                    {
+                                      "Ref":"AWS::AccountId"
+                                    },
+                                    ":deploymentconfig:CodeDeployDefault.AllAtOnce"
+                                 ]
+                              ]
+                           }
+                          ]
+                        },
+                        {
+                           "Effect":"Allow",
+                           "Action":[
+                              "codedeploy:GetDeploymentConfig"
+                           ],
+                           "Resource":[
+                             {
+                                "Fn::Join":[
+                                   "",
+                                   [
+                                      "arn:aws:codedeploy:",
+                                      {
+                                         "Ref":"AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref":"AWS::AccountId"
+                                      },
+                                      ":deploymentconfig:CodeDeployDefault.OneAtATime"
+                                   ]
+                                ]
+                             },
+                             {
+                                "Fn::Join":[
+                                   "",
+                                   [
+                                      "arn:aws:codedeploy:",
+                                      {
+                                         "Ref":"AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref":"AWS::AccountId"
+                                      },
+                                      ":deploymentconfig:CodeDeployDefault.HalfAtATime"
+                                   ]
+                                ]
+                             },
+                             {
+                                "Fn::Join":[
+                                   "",
+                                   [
+                                      "arn:aws:codedeploy:",
+                                      {
+                                         "Ref":"AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref":"AWS::AccountId"
+                                      },
+                                      ":deploymentconfig:CodeDeployDefault.AllAtOnce"
+                                   ]
+                                ]
+                             }
+                           ]
+                        }
+                     ]
+                  },
+                  "Users":["Travis"]
+               }
+            },
+            "CodeDeployApplication": {
+              "Type": "AWS::CodeDeploy::Application",
+              "Properties": {
+                "ComputePlatform": "Server",
+                "ApplicationName": "nvn-codedeploy-app"
+              }
+            },
+            "CodeDeploymentGroup":{
+              "Type" : "AWS::CodeDeploy::DeploymentGroup",
+              "Properties": {
+                "DeploymentGroupName": "NvnCloudDeployGroup",
+                "ApplicationName": {"Ref" :"CodeDeployApplication"},
+                "AutoScalingGroups" :[{"Ref": "NVNWebServerGroup"}],
+                "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
+                "Ec2TagFilters": [
+                  {"Key":"EC2Name1","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-1"},
+                  {"Key":"EC2Name2","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-2"},
+                  {"Key":"EC2Name3","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-3"},
+                  {"Key":"EC2Name4","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-4"},
+                  {"Key":"EC2Name5","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-5"},
+                  {"Key":"EC2Name6","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-6"},
+                  {"Key":"EC2Name7","Type":"KEY_AND_VALUE","Value":"NVNCloudEC2-7"}
+                ],
+                "ServiceRoleArn": { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
               }
             },
             "myDNSRecord" : {

@@ -39,7 +39,8 @@ createStackStatus=`aws cloudformation create-stack --stack-name $StackName \
   ParameterKey=SecretAccessKey,ParameterValue=$SecretAccessKey \
   ParameterKey=bucketName,ParameterValue=$BucketName \
   ParameterKey=MySqlClientPass,ParameterValue=$MySqlClientPass \
-  ParameterKey=HostedZoneResource,ParameterValue=$DomainName`
+  ParameterKey=HostedZoneResource,ParameterValue=$DomainName \
+  --capabilities CAPABILITY_NAMED_IAM`
 
   if [ -z "$createStackStatus" ]; then
     echo "Failed to create stack"
