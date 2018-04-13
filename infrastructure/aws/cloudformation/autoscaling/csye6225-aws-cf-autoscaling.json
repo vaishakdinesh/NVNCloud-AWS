@@ -124,9 +124,6 @@
                                     "sudo apt-get install wget -y \n",
                                     "sudo apt-get install python -y \n",
                                     "sudo apt-get update \n",
-                                    "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
-                                    "sudo chmod +x ./install \n",
-                                    "sudo ./install auto \n",
                                     "sudo apt-get install tomcat8 -y \n",
                                     "sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py \n",
                                     "sudo touch /tmp/cwlogs.conf \n",
@@ -220,8 +217,12 @@
                                         ]
                                       ]
                                     },
-                                    "sudo service codedeploy-agent start \n",
-                                    "sudo apt-get -y install mysql-server \n"
+                                    "sudo apt-get -y install mysql-server \n",
+                                    "sudo apt-get update \n",
+                                    "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
+                                    "sudo chmod +x ./install \n",
+                                    "sudo ./install auto \n"
+                                    "sudo service codedeploy-agent start \n"
                                 ]
                             ]
                         }
