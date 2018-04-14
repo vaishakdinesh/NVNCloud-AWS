@@ -199,25 +199,7 @@
                                     "\"\"' >> /usr/share/tomcat8/bin/setenv.sh \n",
                                                     "chmod +x /usr/share/tomcat8/bin/setenv.sh \n",
                                     "sudo service tomcat8 restart \n",
-                                    {
-                                      "Fn::Join":[
-                                        "",[
-                                          "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ",
-                                          {"Ref": "MySqlClientPass"},
-                                          "'\" \n"
-                                        ]
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Join":[
-                                        "",[
-                                          "sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ",
-                                          {"Ref": "MySqlClientPass"},
-                                          "'\" \n"
-                                        ]
-                                      ]
-                                    },
-                                    "sudo apt-get -y install mysql-server \n",
+                                    "cd ~/ \n",
                                     "sudo apt-get update \n",
                                     "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
                                     "sudo chmod +x ./install \n",
@@ -393,7 +375,7 @@
                            "Effect":"Allow",
                            "Principal":{
                               "Service":[
-                                 "codedeploy.us-east-1.amazonaws.com"
+                                 "codedeploy.us-east-1.amazonaws.com", "application-autoscaling.amazonaws.com"
                               ]
                            },
                            "Action":[
