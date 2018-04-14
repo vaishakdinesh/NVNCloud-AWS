@@ -15,7 +15,7 @@ if [ -z "$DomainName" ]; then
 fi
 DomainName=code-deploy.$DomainName.me
 
-echo "Starting $StackName network setup"
+echo "Starting $StackName ci-cd setup"
 
 echo "Starting to create the stack......"
 
@@ -42,7 +42,7 @@ until [ "$stackstatus" = "CREATE_COMPLETE" ]; do
       echo "$@ creation failed! "
       aws cloudformation describe-stack-events --stack-name $StackName --query 'StackEvents[?(ResourceType=='$@' && ResourceStatus==`CREATE_FAILED`)]'
       echo "deleting stack..... "
-      bash ./csye6225-aws-cf-terminate-application-stack.sh $StackName
+      bash ./csye6225-aws-cf-terminate-ci-cd-stack.sh $StackName
       break
     fi
   }
